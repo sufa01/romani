@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 import os
 import sys
 import json
@@ -1395,7 +1394,9 @@ def run_literature_analysis(pipeline: AdvancedMultiBotPipeline, lang: str, pdf_t
     # Берем фрагмент размером text_sample_size (50000 символов)
     full_text = pipeline.get_text_fragment(full_text, pipeline.text_sample_size)
     print(f"Total text for analysis: {len(full_text)} characters")
+    os.makedirs(pipeline.output_dir, exist_ok=True)
     lit_output_dir = os.path.join(pipeline.output_dir, f"literature_{lang}")
+    os.makedirs(lit_output_dir, exist_ok=True)
     os.makedirs(lit_output_dir, exist_ok=True)
     original_output_dir = pipeline.output_dir
     pipeline.output_dir = lit_output_dir
@@ -1406,6 +1407,7 @@ def run_literature_analysis(pipeline: AdvancedMultiBotPipeline, lang: str, pdf_t
 def compare_bible_vs_literature(pipeline: AdvancedMultiBotPipeline, lang: str, bible_results: Dict, lit_results: Optional[Dict]):
     if lit_results is None:
         return
+    os.makedirs(pipeline.output_dir, exist_ok=True)
     common_bots = set(bible_results.keys()) & set(lit_results.keys())
     comp_data = []
     for bot_name in sorted(common_bots, key=lambda b: pipeline.bots[b]['name']):
@@ -1476,11 +1478,12 @@ def compare_bible_vs_literature(pipeline: AdvancedMultiBotPipeline, lang: str, b
 
 def run_advanced_analysis_all_languages():
     pipeline = AdvancedMultiBotPipeline(
-        output_dir="advanced_multi_bot_results",
+        output_dir="multi_bot_results",
         max_sentences=None,
         timeout=300,
         text_sample_size=50000
     )
+    os.makedirs(pipeline.output_dir, exist_ok=True)
     bible_files = {
         "en": "Bible_eng.pdf",
         "ru": "Bible_rus.pdf",
