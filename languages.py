@@ -376,10 +376,10 @@ def text_to_sentences(text, lang):
     
     return sentences
 
-def text_to_conll(text, output_file, lang):
-    sentences = text_to_sentences(text, lang)
-    generate_conll(sentences, output_file)
-    return sentences
+# def text_to_conll(text, output_file, lang):
+#     sentences = text_to_sentences(text, lang)
+#     generate_conll(sentences, output_file)
+#     return sentences
 
 def analyze_graph_metrics(graph, name):
     metrics = {
