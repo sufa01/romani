@@ -1019,6 +1019,7 @@ class AdvancedMultiBotPipeline:
         plt.savefig(output_file, dpi=150, bbox_inches='tight')
         plt.close()
         print(f"Visualization saved to {output_file}")
+        print("Абсолютный путь:", os.path.abspath(output_file))
 
     def visualize_network_metrics(self, all_comparisons: Dict, lang: str):
         fig, axes = plt.subplots(2, 3, figsize=(20, 14))
