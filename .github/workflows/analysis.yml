@@ -27,8 +27,8 @@ jobs:
 
       - name: Download spaCy language models
         run: |
-          pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
-          pip install https://github.com/explosion/spacy-models/releases/download/ru_core_news_sm-3.7.1/ru_core_news_sm-3.7.1-py3-none-any.whl
+          python -m spacy download en_core_web_sm
+          python -m spacy download ru_core_news_sm
 
       - name: Run main analysis
         run: python main.py
