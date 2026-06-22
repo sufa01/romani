@@ -1477,13 +1477,13 @@ def compare_bible_vs_literature(pipeline: AdvancedMultiBotPipeline, lang: str, b
         json.dump(comp_data, f, indent=2)
 
 def run_advanced_analysis_all_languages():
+    os.makedirs("multi_bot_results", exist_ok=True)
     pipeline = AdvancedMultiBotPipeline(
         output_dir="multi_bot_results",
         max_sentences=None,
         timeout=300,
         text_sample_size=50000
     )
-    os.makedirs(pipeline.output_dir, exist_ok=True)
     bible_files = {
         "en": "Bible_eng.pdf",
         "ru": "Bible_rus.pdf",
