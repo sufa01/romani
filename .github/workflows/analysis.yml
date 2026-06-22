@@ -5,11 +5,11 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:   # позволяет запускать вручную из интерфейса GitHub
+  workflow_dispatch:
 
 jobs:
   analyze:
-    runs-on: ubuntu-latest   # можно сменить на macos-latest, если нужна macOS-совместимость
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
@@ -27,13 +27,13 @@ jobs:
 
       - name: Download spaCy language models
         run: |
-          python -m spacy download en_core_web_sm
-          python -m spacy download ru_core_news_sm
+          pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
+          pip install https://github.com/explosion/spacy-models/releases/download/ru_core_news_sm-3.7.1/ru_core_news_sm-3.7.1-py3-none-any.whl
 
       - name: Run main analysis
         run: python main.py
 
-      - name: Upload results (опционально)
+      - name: Upload results
         uses: actions/upload-artifact@v4
         with:
           name: analysis-results
