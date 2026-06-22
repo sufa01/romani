@@ -11,7 +11,7 @@ import re
 
 class RomaniMorphology:
     """
-    Морфологические правила для цыганского языка (диалект из текста)
+    Морфологические правила для цыганского языка
     """
     
     # Словарь местоимений с их свойствами
@@ -647,11 +647,6 @@ def resolve_anaphora_rom(conll_file: str):
                 sent.text = " ".join(t.form for t in sent.tokens)
         
         dm.add_nps(nps, sent.sent_id)
-    
-    print(f"Всего предложений: {len(sentences)}")
-    print(f"Найдено местоимений 3 лица: {total_pronouns_found}")
-    print(f"Всего кандидатов рассмотрено: {total_candidates}")
-    print(f"Разрешено местоимений: {resolved_count}")
     
     if total_pronouns_found > 0:
         print(f"Процент разрешения: {resolved_count/total_pronouns_found*100:.1f}%")
