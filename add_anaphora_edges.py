@@ -2,7 +2,7 @@ import re
 
 
 def clean_label_simple(text):
-    """Простая очистка метки без фильтрации языка"""
+    """очистка метки без фильтрации языка"""
     if not text:
         return ""
     text = text.replace('́', '')
