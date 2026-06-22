@@ -20,6 +20,9 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 from languages import pdf_to_text
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
+import os
+os.makedirs("multi_bot_results", exist_ok=True)
+print("Папка создана:", os.path.abspath("multi_bot_results"))
 
 # Бот 1: Марковские цепи 
 class MarkovChainBot:
