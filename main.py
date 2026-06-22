@@ -18,7 +18,7 @@ import seaborn as sns
 warnings.filterwarnings('ignore')
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
-from pipeline_2 import pdf_to_text, text_to_sentences, process_language_with_graph
+from languages import pdf_to_text, text_to_sentences, process_language_with_graph
 from sentence_transformers import SentenceTransformer
 from sklearn.decomposition import PCA
 
