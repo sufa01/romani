@@ -351,31 +351,6 @@ def pdf_to_text(pdf_path, lang=None, start_page=None, end_page=None):
     
     return text
 
-def text_to_sentences(text, lang):
-    if lang == "rom":
-        return parse_romani_text(text)
-    
-    nlp = nlp_models[lang]
-    doc = nlp(text)
-    
-    sentences = []
-    for i, sent in enumerate(doc.sents):
-        tokens = []
-        for token in sent:
-            tok = Token(
-                id=token.i - sent.start + 1,
-                form=token.text,
-                lemma=token.lemma_,
-                pos=token.pos_,
-                xpos=token.tag_,
-                head=(token.head.i - sent.start + 1) if token.head in sent else 0,
-                deprel=token.dep_
-            )
-            tokens.append(tok)
-        sentences.append(Sentence(tokens=tokens, sent_id=i, text=sent.text))
-    
-    return sentences
-
 # def text_to_conll(text, output_file, lang):
 #     sentences = text_to_sentences(text, lang)
 #     generate_conll(sentences, output_file)
@@ -409,130 +384,130 @@ def analyze_graph_metrics(graph, name):
     
     return metrics
 
-def process_language_with_graph(pdf_path, lang, limit=50000, start_page=None):    
-    # Настройки для цыганского
-    if lang == "rom":
-        if start_page is None:
-            start_page = 34  # Пропускаем предисловие на русском/английском
-        if limit == 50000:
-            limit = 300000
-    # Извлекаем текст из PDF
-    text = pdf_to_text(pdf_path, lang=lang, start_page=start_page)
+# def process_language_with_graph(pdf_path, lang, limit=50000, start_page=None):    
+#     # Настройки для цыганского
+#     if lang == "rom":
+#         if start_page is None:
+#             start_page = 34  # Пропускаем предисловие на русском/английском
+#         if limit == 50000:
+#             limit = 300000
+#     # Извлекаем текст из PDF
+#     text = pdf_to_text(pdf_path, lang=lang, start_page=start_page)
     
-    if not text:
-        return None, None
+#     if not text:
+#         return None, None
     
-    preview = text[:300].replace('\n', ' ')
+#     preview = text[:300].replace('\n', ' ')
     
-    # Применяем лимит
-    text = text[:limit]
+#     # Применяем лимит
+#     text = text[:limit]
     
-    conll_file = f"temp_{lang}.conll"    
-    if lang == "en":
-        sentences = text_to_sentences(text, lang)
-        generate_conll(sentences, conll_file)
-        sentences = resolve_anaphora_en(conll_file)
-        conll_lines = en_to_conll(sentences)        
-        graph = build_en_graph_spacy(sentences)
-        anaphora_edges = add_anaphora_edges(graph, sentences, "en")
+#     conll_file = f"temp_{lang}.conll"    
+#     if lang == "en":
+#         sentences = text_to_sentences(text, lang)
+#         generate_conll(sentences, conll_file)
+#         sentences = resolve_anaphora_en(conll_file)
+#         conll_lines = en_to_conll(sentences)        
+#         graph = build_en_graph_spacy(sentences)
+#         anaphora_edges = add_anaphora_edges(graph, sentences, "en")
     
-    elif lang == "ru":
-        sentences = text_to_sentences(text, lang)
-        generate_conll(sentences, conll_file)
-        sentences = resolve_anaphora_ru(conll_file)
-        conll_lines = ru_to_conll(sentences)        
-        graph = build_ru_graph_spacy(sentences)
-        anaphora_edges = add_anaphora_edges(graph, sentences, "ru")
+#     elif lang == "ru":
+#         sentences = text_to_sentences(text, lang)
+#         generate_conll(sentences, conll_file)
+#         sentences = resolve_anaphora_ru(conll_file)
+#         conll_lines = ru_to_conll(sentences)        
+#         graph = build_ru_graph_spacy(sentences)
+#         anaphora_edges = add_anaphora_edges(graph, sentences, "ru")
 
     
-    elif lang == "rom":
-        sentences = parse_romani_text(text)
-        generate_conll(sentences, conll_file)
-        sentences = resolve_anaphora_rom(conll_file)
-        conll_lines = rom_to_conll(sentences)
+#     elif lang == "rom":
+#         sentences = parse_romani_text(text)
+#         generate_conll(sentences, conll_file)
+#         sentences = resolve_anaphora_rom(conll_file)
+#         conll_lines = rom_to_conll(sentences)
         
-        ENGLISH_STOPWORDS = {
-            'be', 'is', 'are', 'was', 'were', 'been', 'being',
-            'have', 'has', 'had', 'having',
-            'do', 'does', 'did', 'doing',
-            'say', 'says', 'said', 'saying',
-            'go', 'goes', 'went', 'gone', 'going',
-            'come', 'comes', 'came', 'coming',
-            'make', 'makes', 'made', 'making',
-            'take', 'takes', 'took', 'taken', 'taking',
-            'get', 'gets', 'got', 'gotten', 'getting',
-            'see', 'sees', 'saw', 'seen', 'seeing',
-            'know', 'knows', 'knew', 'known', 'knowing',
-            'think', 'thinks', 'thought', 'thinking',
-            'want', 'wants', 'wanted', 'wanting',
-            'like', 'likes', 'liked', 'liking',
-            'need', 'needs', 'needed', 'needing',
-            'the', 'a', 'an', 'and', 'or', 'but', 'of', 'in', 'on', 'at', 'to', 'for',
-            'with', 'by', 'from', 'as', 'this', 'that', 'these', 'those',
-            'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them',
-            'my', 'your', 'his', 'her', 'its', 'our', 'their',
-            'bible', 'testament', 'chapter', 'verse', 'copyright', 'reserved',
-            'rights', 'international', 'publisher', 'printed', 'translation', 'does', 'can'
-        }
+#         ENGLISH_STOPWORDS = {
+#             'be', 'is', 'are', 'was', 'were', 'been', 'being',
+#             'have', 'has', 'had', 'having',
+#             'do', 'does', 'did', 'doing',
+#             'say', 'says', 'said', 'saying',
+#             'go', 'goes', 'went', 'gone', 'going',
+#             'come', 'comes', 'came', 'coming',
+#             'make', 'makes', 'made', 'making',
+#             'take', 'takes', 'took', 'taken', 'taking',
+#             'get', 'gets', 'got', 'gotten', 'getting',
+#             'see', 'sees', 'saw', 'seen', 'seeing',
+#             'know', 'knows', 'knew', 'known', 'knowing',
+#             'think', 'thinks', 'thought', 'thinking',
+#             'want', 'wants', 'wanted', 'wanting',
+#             'like', 'likes', 'liked', 'liking',
+#             'need', 'needs', 'needed', 'needing',
+#             'the', 'a', 'an', 'and', 'or', 'but', 'of', 'in', 'on', 'at', 'to', 'for',
+#             'with', 'by', 'from', 'as', 'this', 'that', 'these', 'those',
+#             'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them',
+#             'my', 'your', 'his', 'her', 'its', 'our', 'their',
+#             'bible', 'testament', 'chapter', 'verse', 'copyright', 'reserved',
+#             'rights', 'international', 'publisher', 'printed', 'translation', 'does', 'can'
+#         }
         
-        filtered_sentences = []
-        filtered_tokens_count = 0
-        total_tokens_count = 0
+#         filtered_sentences = []
+#         filtered_tokens_count = 0
+#         total_tokens_count = 0
         
-        for sent in sentences:
-            total_tokens_count += len(sent.tokens)
-            filtered_tokens = []
+#         for sent in sentences:
+#             total_tokens_count += len(sent.tokens)
+#             filtered_tokens = []
             
-            for tok in sent.tokens:
-                form_lower = tok.form.lower()
-                lemma_lower = tok.lemma.lower() if tok.lemma else ""
+#             for tok in sent.tokens:
+#                 form_lower = tok.form.lower()
+#                 lemma_lower = tok.lemma.lower() if tok.lemma else ""
                 
-                # Пропускаем английские стоп-слова
-                if form_lower in ENGLISH_STOPWORDS or lemma_lower in ENGLISH_STOPWORDS:
-                    filtered_tokens_count += 1
-                    continue
+#                 # Пропускаем английские стоп-слова
+#                 if form_lower in ENGLISH_STOPWORDS or lemma_lower in ENGLISH_STOPWORDS:
+#                     filtered_tokens_count += 1
+#                     continue
                 
-                # Пропускаем слова, состоящие только из латиницы
-                if all(ord(c) < 128 for c in tok.form if c.isalpha()):
-                    filtered_tokens_count += 1
-                    continue
+#                 # Пропускаем слова, состоящие только из латиницы
+#                 if all(ord(c) < 128 for c in tok.form if c.isalpha()):
+#                     filtered_tokens_count += 1
+#                     continue
                 
-                # Если лемма английская - заменяем на форму
-                if tok.lemma and all(ord(c) < 128 for c in tok.lemma if c.isalpha()):
-                    tok.lemma = tok.form.lower()
+#                 # Если лемма английская - заменяем на форму
+#                 if tok.lemma and all(ord(c) < 128 for c in tok.lemma if c.isalpha()):
+#                     tok.lemma = tok.form.lower()
                 
-                filtered_tokens.append(tok)
+#                 filtered_tokens.append(tok)
             
-            if len(filtered_tokens) >= 2:
-                old_to_new = {}
-                for i, tok in enumerate(filtered_tokens, 1):
-                    old_to_new[tok.id] = i
-                    tok.id = i
+#             if len(filtered_tokens) >= 2:
+#                 old_to_new = {}
+#                 for i, tok in enumerate(filtered_tokens, 1):
+#                     old_to_new[tok.id] = i
+#                     tok.id = i
                 
-                for tok in filtered_tokens:
-                    if tok.head in old_to_new:
-                        tok.head = old_to_new[tok.head]
-                    else:
-                        tok.head = 0
+#                 for tok in filtered_tokens:
+#                     if tok.head in old_to_new:
+#                         tok.head = old_to_new[tok.head]
+#                     else:
+#                         tok.head = 0
                 
-                sent.tokens = filtered_tokens
-                sent.text = ' '.join(t.form for t in filtered_tokens)
-                filtered_sentences.append(sent)
+#                 sent.tokens = filtered_tokens
+#                 sent.text = ' '.join(t.form for t in filtered_tokens)
+#                 filtered_sentences.append(sent)
         
-        sentences = filtered_sentences
-        conll_lines = rom_to_conll(sentences)
-        graph = build_rom_graph_spacy(sentences)
-        anaphora_edges = add_anaphora_edges(graph, sentences, "rom")
+#         sentences = filtered_sentences
+#         conll_lines = rom_to_conll(sentences)
+#         graph = build_rom_graph_spacy(sentences)
+#         anaphora_edges = add_anaphora_edges(graph, sentences, "rom")
 
     
-    else:
-        return None, None
+#     else:
+#         return None, None
     
-    output_file = f"resolved_{lang}.conll"
+#     output_file = f"resolved_{lang}.conll"
     
-    with open(output_file, "w", encoding="utf-8") as f:
-        f.write("\n".join(conll_lines))
-    return sentences, graph
+#     with open(output_file, "w", encoding="utf-8") as f:
+#         f.write("\n".join(conll_lines))
+#     return sentences, graph
 
 def analyze_graph_quality(graph, sentences, lang):
     if len(graph.vertices) > 0:
