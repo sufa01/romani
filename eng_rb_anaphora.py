@@ -32,7 +32,7 @@ class PleonasticItDetector:
         if head.lemma == "be":
             return self._is_extraposition(it_token, head, sent)
 
-        # 3. Raising verbs: it seems that...
+        # 3. Raising verbs
         if head.lemma in self.raising_verbs:
             return self._has_clausal_complement(head, sent)
 
