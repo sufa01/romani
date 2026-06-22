@@ -114,7 +114,6 @@ class SimpleBotWrapper:
         self.model = None
 
     def train(self, text, epochs=20, hidden_size=128):
-        print(f"Обучение Simple LSTM: {epochs} эпох")
         self.model = self._create_emulated_model(text)
 
     def _create_emulated_model(self, text):
@@ -152,7 +151,7 @@ class SimpleBotWrapper:
                     break
         return ' '.join(result)
 
-# Бот 3
+# Бот 4: Hybrid
 class HybridBot:
     def __init__(self, n_gram_order=5, neural_dim=128):
         self.n_gram_order = n_gram_order
@@ -183,7 +182,6 @@ class HybridBot:
                         self.word_embeddings[context_word] = np.zeros(self.neural_dim)
                     lr = self.lang_params.get('embedding_lr', 0.01)
                     self.word_embeddings[word] += np.random.randn(self.neural_dim) * lr
-        print(f"Обучено: {len(self.ngram_model)} n-грамм, {len(self.word_embeddings)} слов")
 
     def _get_language_params(self, lang):
         params = {
@@ -249,7 +247,7 @@ class HybridBot:
                     break
         return ' '.join(words)
 
-# Бот 4
+# Бот 5: CNN+Attention
 class CNNAttentionBot:
     def __init__(self, vocab_size=10000, embed_dim=256, num_filters=128, kernel_sizes=[3,5,7]):
         self.vocab_size = vocab_size
@@ -271,7 +269,6 @@ class CNNAttentionBot:
             self.word_to_idx[word] = idx
             self.idx_to_word[idx] = word
         self.vocab_size = len(self.word_to_idx)
-        print(f"Размер словаря: {self.vocab_size}")
 
     def _build_attention_weights(self, text, context_size=5):
         words = text.split()
@@ -294,9 +291,7 @@ class CNNAttentionBot:
         return attention_matrix
 
     def train(self, text, epochs=30):
-        print(f"Обучение CNN+Attention Bot: {epochs} эпох")
         self._build_vocabulary(text)
-        print("Построение весов внимания...")
         self.attention_weights = self._build_attention_weights(text)
         words = text.split()
         self.transition_matrix = defaultdict(Counter)
@@ -304,8 +299,7 @@ class CNNAttentionBot:
             current = words[i]
             next_word = words[i+1]
             self.transition_matrix[current][next_word] += 1
-        print(f"Обучено: {len(self.attention_weights)} паттернов внимания")
-
+            
     def generate(self, seed_text, length=1500, temperature=0.8):
         words = seed_text.split()
         for _ in range(length):
@@ -338,7 +332,8 @@ class CNNAttentionBot:
                 rand_idx = random.randint(2, min(self.vocab_size, len(self.idx_to_word)) - 1)
                 words.append(self.idx_to_word.get(rand_idx, 'the'))
         return ' '.join(words)
-# Бот 5
+        
+# Бот 6: Advanced N-gram bot
 class AdvancedNGramBot:
     def __init__(self, max_n=5):
         self.max_n = max_n
@@ -407,7 +402,7 @@ class AdvancedNGramBot:
         scores = scores / scores.sum()
         return np.random.choice(words_list, p=scores)
 
-# Бот 6  
+# Бот 7: Statistical LM bot
 class StatisticalLMBot:
     def __init__(self):
         self.word_freq = Counter()
@@ -416,7 +411,6 @@ class StatisticalLMBot:
         self.sentence_starts = []
 
     def train(self, text, epochs=10):
-        print("Обучение Statistical LM Bot...")
         sentences = re.split(r'[.!?]+', text)
         sentences = [s.strip() for s in sentences if len(s.strip()) > 10]
         for sentence in sentences:
@@ -432,7 +426,6 @@ class StatisticalLMBot:
                 key = (words[i], words[i+1])
                 self.trigram_freq[key][words[i+2]] += 1
         self._normalize_probs()
-        print(f"Обучено: {len(self.bigram_freq)} биграмм, {len(self.trigram_freq)} триграмм")
 
     def _normalize_probs(self):
         total_words = sum(self.word_freq.values())
@@ -790,6 +783,7 @@ class TextMetrics:
         traj_sim = metrics_dict.get('trajectory_similarity', 0.0)
         score += traj_sim * w['trajectory_similarity']
         return score
+        
 # Запуск ботов
 class AdvancedMultiBotPipeline:
     def __init__(self, output_dir="advanced_multi_bot_results", max_sentences=None, timeout=300, text_sample_size=50000):
@@ -860,7 +854,6 @@ class AdvancedMultiBotPipeline:
         start_idx = min(100, len(words)-3)
         seed = ' '.join(words[start_idx:start_idx+3])
         bot_texts['markov'] = markov.generate(seed, length=3000, temperature=0.7)
-        print(f"Generated: {len(bot_texts['markov'])} chars\n")
 
         # 2. Simple LSTM
         print("Simple LSTM")
@@ -868,7 +861,6 @@ class AdvancedMultiBotPipeline:
         simple_bot.train(train_sample, epochs=20, hidden_size=128)
         start_text = train_sample[100:200] if len(train_sample) > 200 else train_sample[:100]
         bot_texts['simple_lstm'] = simple_bot.generate(start_text, length=3000, temperature=0.8)
-        print(f"Generated: {len(bot_texts['simple_lstm'])} chars\n")
 
         # 3. Better LSTM
         print("Better LSTM (char-level)")
@@ -876,68 +868,43 @@ class AdvancedMultiBotPipeline:
         better_bot.train(train_sample, epochs=30)
         start_text = train_sample[100:200] if len(train_sample) > 200 else train_sample[:100]
         bot_texts['better_lstm'] = better_bot.generate(start_text, length=3000, temperature=0.8)
-        print(f"Generated: {len(bot_texts['better_lstm'])} chars\n")
 
         # 4. Hybrid
-        print("🤖 Bot 4/7: Hybrid N-gram + Neural")
-        try:
-            hybrid = HybridBot(n_gram_order=5, neural_dim=128)
-            hybrid.train(train_sample, epochs=15, lang=lang)
-            words = train_sample.split()
-            start_idx = min(100, len(words)-5)
-            seed = ' '.join(words[start_idx:start_idx+5])
-            bot_texts['hybrid'] = hybrid.generate(seed, length=1500, temperature=0.75)
-            print(f"   ✅ Generated: {len(bot_texts['hybrid'])} chars\n")
-        except Exception as e:
-            print(f"   ❌ Error: {e}\n")
-            bot_texts['hybrid'] = self._create_simple_bot_text(human_text, 1500)
+        print("Hybrid N-gram + Neural")
+        hybrid = HybridBot(n_gram_order=5, neural_dim=128)
+        hybrid.train(train_sample, epochs=15, lang=lang)
+        words = train_sample.split()
+        start_idx = min(100, len(words)-5)
+        seed = ' '.join(words[start_idx:start_idx+5])
+        bot_texts['hybrid'] = hybrid.generate(seed, length=1500, temperature=0.75)
 
         # 5. CNN+Attention
-        print("🤖 Bot 5/7: CNN + Attention")
-        try:
-            cnn_bot = CNNAttentionBot()
-            cnn_bot.train(train_sample, epochs=30)
-            words = train_sample.split()
-            start_idx = min(100, len(words)-5)
-            seed = ' '.join(words[start_idx:start_idx+5])
-            bot_texts['cnn_attention'] = cnn_bot.generate(seed, length=1500, temperature=0.8)
-            print(f"   ✅ Generated: {len(bot_texts['cnn_attention'])} chars\n")
-        except Exception as e:
-            print(f"   ❌ Error: {e}\n")
-            bot_texts['cnn_attention'] = self._create_simple_bot_text(human_text, 1500)
+        print("CNN + Attention")
+        cnn_bot = CNNAttentionBot()
+        cnn_bot.train(train_sample, epochs=30)
+        words = train_sample.split()
+        start_idx = min(100, len(words)-5)
+        seed = ' '.join(words[start_idx:start_idx+5])
+        bot_texts['cnn_attention'] = cnn_bot.generate(seed, length=1500, temperature=0.8)
 
         # 6. Advanced N-gram
-        print("🤖 Bot 6/7: Advanced N-gram (GPT-2 alternative)")
-        try:
-            adv_ngram = AdvancedNGramBot(max_n=5)
-            adv_ngram.train(train_sample, epochs=5, lang=lang)
-            words = train_sample.split()
-            seed = ' '.join(words[50:55]) if len(words) > 55 else train_sample[:50]
-            bot_texts['advanced_ngram'] = adv_ngram.generate(seed, length=1500)
-            print(f"   ✅ Generated: {len(bot_texts['advanced_ngram'])} chars\n")
-        except Exception as e:
-            print(f"   ❌ Error: {e}\n")
-            bot_texts['advanced_ngram'] = self._create_simple_bot_text(human_text, 1500)
+        print("Advanced N-gram (GPT-2 alternative)")
+        adv_ngram = AdvancedNGramBot(max_n=5)
+        adv_ngram.train(train_sample, epochs=5, lang=lang)
+        words = train_sample.split()
+        seed = ' '.join(words[50:55]) if len(words) > 55 else train_sample[:50]
+        bot_texts['advanced_ngram'] = adv_ngram.generate(seed, length=1500)
 
         # 7. Statistical LM
-        print("🤖 Bot 7/7: Statistical LM (BERT alternative)")
-        try:
-            stat_lm = StatisticalLMBot()
-            stat_lm.train(train_sample, epochs=10)
-            words = train_sample.split()
-            seed = ' '.join(words[100:110]) if len(words) > 110 else train_sample[:50]
-            bot_texts['statistical_lm'] = stat_lm.generate(seed, length=1500, temperature=0.8)
-            print(f"   ✅ Generated: {len(bot_texts['statistical_lm'])} chars\n")
-        except Exception as e:
-            print(f"   ❌ Error: {e}\n")
-            bot_texts['statistical_lm'] = self._create_simple_bot_text(human_text, 1500)
-
+        print("Statistical LM (BERT alternative)")
+        stat_lm = StatisticalLMBot()
+        stat_lm.train(train_sample, epochs=10)
+        words = train_sample.split()
+        seed = ' '.join(words[100:110]) if len(words) > 110 else train_sample[:50]
+        bot_texts['statistical_lm'] = stat_lm.generate(seed, length=1500, temperature=0.8)
         return bot_texts
 
     def compare_all_bots(self, human_text: str, bot_texts: Dict, lang: str = 'en') -> Dict:
-        print(f"\n{'='*60}")
-        print(f"📊 Comparing Human vs ALL Bots ({lang.upper()})")
-        print(f"{'='*60}\n")
         all_comparisons = {}
         traj_analyzer = SemanticTrajectoryAnalyzer(word_embeddings=None)
         human_traj = traj_analyzer.get_trajectory(human_text)
@@ -1018,15 +985,14 @@ class AdvancedMultiBotPipeline:
                 'comparison': metrics_dict,
                 'bot_text': bot_text
             }
-            print(f"   {bot_info['name']}:")
-            print(f"      Composite Score: {metrics_dict['composite_score']*100:.1f}%")
-            print(f"      Trajectory Similarity: {traj_sim:.3f}")
-            print(f"      Repetition: {metrics_dict['repetition_ratio']*100:.1f}%")
-            print(f"      Network Assortativity: {bot_network['assortativity']:.3f} (human: {human_network['assortativity']:.3f})")
+            print(f"bot_info['name']}:")
+            print(f"Composite Score: {metrics_dict['composite_score']*100:.1f}%")
+            print(f"Trajectory Similarity: {traj_sim:.3f}")
+            print(f"Repetition: {metrics_dict['repetition_ratio']*100:.1f}%")
+            print(f"Network Assortativity: {bot_network['assortativity']:.3f} (human: {human_network['assortativity']:.3f})")
         return all_comparisons
 
     def visualize_advanced_comparison(self, all_comparisons: Dict, lang: str, human_text: str = ""):
-        print(f"\n📊 Creating advanced visualizations...")
         fig = plt.figure(figsize=(24, 16))
         ax1 = fig.add_subplot(2, 4, 1, projection='polar')
         self._plot_radar_chart(ax1, all_comparisons)
@@ -1050,10 +1016,9 @@ class AdvancedMultiBotPipeline:
         output_file = os.path.join(self.output_dir, f'advanced_comparison_{lang}.png')
         plt.savefig(output_file, dpi=150, bbox_inches='tight')
         plt.close()
-        print(f"✅ Visualization saved to {output_file}")
+        print(f"Visualization saved to {output_file}")
 
     def visualize_network_metrics(self, all_comparisons: Dict, lang: str):
-        print(f"\n📊 Creating network analysis visualizations...")
         fig, axes = plt.subplots(2, 3, figsize=(20, 14))
         first_bot = list(all_comparisons.keys())[0]
         human_net = all_comparisons[first_bot]['comparison']['network']['human']
@@ -1161,15 +1126,8 @@ class AdvancedMultiBotPipeline:
         output_file = os.path.join(self.output_dir, f'network_analysis_{lang}.png')
         plt.savefig(output_file, dpi=150, bbox_inches='tight')
         plt.close()
-        print(f"✅ Network visualization saved to {output_file}")
+        print(f"Network visualization saved to {output_file}")
 
-    # Вспомогательные методы визуализации (опущены для краткости, но они есть в полной версии)
-    # Здесь должны быть все _plot_* методы, но для экономии места я их не копирую,
-    # они идентичны тем, что были в предыдущем ответе. В реальном файле они должны присутствовать.
-    # (Я включу их в финальный код, который вы скопируете.)
-
-    # Для экономии места в ответе я пропущу полные реализации _plot_*, но в итоговом файле они будут.
-    # Ниже приведены заглушки, чтобы код не падал – замените их на полные методы из предыдущего ответа.
     def _plot_radar_chart(self, ax, all_comparisons):
         categories = ['Jaccard', 'Levenshtein', 'Complexity', 'Anti-Rep', 'Traj.Sim']
         N = len(categories)
@@ -1352,9 +1310,6 @@ class AdvancedMultiBotPipeline:
         ax.set_title('Detailed Metrics Summary', fontsize=10)
 
     def run_advanced_analysis(self, human_text: str, lang: str = 'en') -> Dict:
-        print(f"\n{'='*70}")
-        print(f"🚀 ADVANCED MULTI-BOT ANALYSIS: {lang.upper()}")
-        print(f"{'='*70}")
         start_time = time.time()
         bot_texts = self.generate_with_all_bots(human_text, lang)
         all_comparisons = self.compare_all_bots(human_text, bot_texts, lang)
@@ -1362,7 +1317,6 @@ class AdvancedMultiBotPipeline:
         self.visualize_network_metrics(all_comparisons, lang)
         self.save_results(all_comparisons, lang)
         elapsed = time.time() - start_time
-        print(f"\n⏱️ Total analysis time: {elapsed:.1f} seconds")
         return all_comparisons
 
     def save_results(self, all_comparisons: Dict, lang: str):
@@ -1399,10 +1353,6 @@ class AdvancedMultiBotPipeline:
             json.dump(metrics_data, f, indent=2, default=str)
         print(f"✅ Results saved to {self.output_dir}")
 
-# ================================
-#  ФУНКЦИИ ДЛЯ АНАЛИЗА ЛИТЕРАТУРЫ
-# ================================
-
 def collect_pdfs_from_folder(folder_path: str) -> List[str]:
     if not os.path.isdir(folder_path):
         return []
@@ -1420,20 +1370,14 @@ def extract_text_from_pdfs(pdf_paths: List[str], lang: str, pdf_to_text_func) ->
         file_text = ""
         success = False
         for code in lang_codes:
-            try:
-                print(f"   📄 Extracting: {os.path.basename(pdf_path)} (lang={code})")
-                if code in ('rom', 'ro'):
-                    text = pdf_to_text_func(pdf_path, lang=code, start_page=34)
-                else:
-                    text = pdf_to_text_func(pdf_path, lang=code)
-                if text and len(text.strip()) > 100:
-                    file_text = text
-                    success = True
-                    break
-                else:
-                    print(f"   ⚠️ Got only {len(text)} chars with lang={code}")
-            except Exception as e:
-                print(f"   ⚠️ Error with lang={code}: {e}")
+            if code in ('rom', 'ro'):
+                text = pdf_to_text_func(pdf_path, lang=code, start_page=34)
+            else:
+                text = pdf_to_text_func(pdf_path, lang=code)
+            if text and len(text.strip()) > 100:
+                file_text = text
+                success = True
+                break
         if success:
             all_text.append(file_text)
         else:
@@ -1444,29 +1388,16 @@ def extract_text_from_pdfs(pdf_paths: List[str], lang: str, pdf_to_text_func) ->
 def run_literature_analysis(pipeline: AdvancedMultiBotPipeline, lang: str, pdf_to_text_func):
     folder_name = f"{lang}_science"
     if not os.path.isdir(folder_name):
-        print(f"❌ Folder '{folder_name}' not found.")
+        print(f"Folder '{folder_name}' not found.")
         return None
     pdf_files = collect_pdfs_from_folder(folder_name)
     if not pdf_files:
-        print(f"❌ No PDF files in '{folder_name}'.")
+        print(f"No PDF files in '{folder_name}'.")
         return None
-    print(f"\n{'='*70}")
-    print(f"📚 LITERATURE ANALYSIS: {lang.upper()} ({len(pdf_files)} PDFs)")
-    print(f"{'='*70}")
     full_text, failed_files = extract_text_from_pdfs(pdf_files, lang, pdf_to_text_func)
-    if failed_files:
-        print(f"⚠️ {len(failed_files)} file(s) produced no useful text:")
-        for f in failed_files:
-            print(f"   - {f}")
-        if lang == 'ru':
-            print("💡 Russian PDFs may be scanned images. Consider using OCR (e.g., pytesseract) or provide text-based PDFs.")
-    if len(full_text) < 5000:
-        print(f"❌ Total extracted text is too short ({len(full_text)} chars). Minimum 5000 required for analysis.")
-        print("   Skipping literature analysis for this language.")
-        return None
     # Берем фрагмент размером text_sample_size (50000 символов)
     full_text = pipeline.get_text_fragment(full_text, pipeline.text_sample_size)
-    print(f"✅ Total text for analysis: {len(full_text)} characters")
+    print(f"Total text for analysis: {len(full_text)} characters")
     lit_output_dir = os.path.join(pipeline.output_dir, f"literature_{lang}")
     os.makedirs(lit_output_dir, exist_ok=True)
     original_output_dir = pipeline.output_dir
@@ -1477,15 +1408,8 @@ def run_literature_analysis(pipeline: AdvancedMultiBotPipeline, lang: str, pdf_t
 
 def compare_bible_vs_literature(pipeline: AdvancedMultiBotPipeline, lang: str, bible_results: Dict, lit_results: Optional[Dict]):
     if lit_results is None:
-        print(f"No literature results for {lang}, skipping comparison.")
         return
-    print(f"\n{'='*70}")
-    print(f"📊 BIBLE vs LITERATURE COMPARISON: {lang.upper()}")
-    print(f"{'='*70}")
     common_bots = set(bible_results.keys()) & set(lit_results.keys())
-    if not common_bots:
-        print("No common bots to compare.")
-        return
     comp_data = []
     for bot_name in sorted(common_bots, key=lambda b: pipeline.bots[b]['name']):
         b_score = bible_results[bot_name]['comparison'].get('composite_score', 0) * 100
@@ -1504,7 +1428,6 @@ def compare_bible_vs_literature(pipeline: AdvancedMultiBotPipeline, lang: str, b
             'lit_repet': l_repet
         })
     print(f"\n{'Bot':<30} {'Bible Score':>12} {'Lit Score':>12} {'Diff':>8}")
-    print("-"*65)
     for d in comp_data:
         diff = d['lit_score'] - d['bible_score']
         print(f"{d['bot']:<30} {d['bible_score']:>11.1f}% {d['lit_score']:>11.1f}% {diff:>+7.1f}%")
@@ -1550,12 +1473,9 @@ def compare_bible_vs_literature(pipeline: AdvancedMultiBotPipeline, lang: str, b
     out_path = os.path.join(pipeline.output_dir, f'bible_vs_literature_{lang}.png')
     plt.savefig(out_path, dpi=150, bbox_inches='tight')
     plt.close()
-    print(f"✅ Comparison plot saved to {out_path}")
     json_path = os.path.join(pipeline.output_dir, f'bible_vs_literature_{lang}.json')
     with open(json_path, 'w', encoding='utf-8') as f:
         json.dump(comp_data, f, indent=2)
-    print(f"✅ Comparison data saved to {json_path}")
-
 
 def run_advanced_analysis_all_languages():
     pipeline = AdvancedMultiBotPipeline(
@@ -1586,7 +1506,6 @@ def run_advanced_analysis_all_languages():
       else:
           full_text = pdf_to_text(filename, lang=lang)
       text = pipeline.get_text_fragment(full_text, pipeline.text_sample_size)
-      print(f"✅ Extracted {len(text):,} characters (fragment used)")
       results = pipeline.run_advanced_analysis(text, lang=lang)
       bible_results_all[lang] = results
       rankings = sorted(results.items(),
@@ -1600,6 +1519,7 @@ def run_advanced_analysis_all_languages():
           print(f"Composite Score: {composite_score*100:.1f}%")
           print(f"Trajectory Similarity: {comp.get('trajectory_similarity', 0):.3f}")
           print(f"Repetition: {comp.get('repetition_ratio', 0)*100:.1f}%")
+    
     # Анализ научной литературы
     for lang in ["en", "ru"]:
         lit_results = run_literature_analysis(pipeline, lang, pdf_to_text)
@@ -1607,8 +1527,6 @@ def run_advanced_analysis_all_languages():
             lang_key = 'en' if lang == 'en' else 'ru'
             if lang_key in bible_results_all:
                 compare_bible_vs_literature(pipeline, lang, bible_results_all[lang_key], lit_results)
-            else:
-                print(f"⚠️ No Bible results for {lang_key}, skipping comparison.")
     print(f"Результаты сохранены в {pipeline.output_dir}")
 
 if __name__ == "__main__":
