@@ -51,7 +51,7 @@ def parse_romani_text(text):
         return latin_ratio > 0.5
     
     sentences = []
-    print(f"   Длина текста: {len(text)} символов")
+    print(f"Длина текста: {len(text)} символов")
     bible_start = re.search(
         r'Англэды́р\s+сарэ́стыр|Сыр\s+Дэвэ́л\s+Создыя́|^1\s+Англэды́р|'
         r'пхэндя́\s+Дэвэ́л|создыя́\s+болыбэ́н',
@@ -60,7 +60,6 @@ def parse_romani_text(text):
     )
     if bible_start:
         text = text[bible_start.start():]
-        print(f"   Начало библейского текста: '{text[:80].replace(chr(10), ' ')}...'")
     lines = text.split('\n')
     cleaned_lines = []
     english_markers = [
@@ -123,7 +122,6 @@ def parse_romani_text(text):
         if part_text and len(part_text) > 5 and not is_english_phrase(part_text):
             parts.append(('?', part_text))
     
-    print(f"   Найдено частей после фильтрации: {len(parts)}")
     PRONOUNS_NORM = {
         'мэ', 'ме', 'ту', 'ев', 'йов', 'ой', 'амен', 'амэн', 'тумен', 'тумэн', 'вон',
         'ман', 'тут', 'лэс', 'лес', 'ла', 'лэн', 'лен', 'амэ', 'тумэ',
@@ -249,16 +247,6 @@ def parse_romani_text(text):
             sentences.append(sent_obj)
             sent_idx += 1
             
-            if pronouns_found and sent_idx <= 15:
-                print(f"   [{sent_idx}] {part_text[:60]}...")
-                print(f"        Местоимения: {pronouns_found}")
-    
-    print(f"\n   📊 ИТОГИ:")
-    print(f"   Предложений: {sent_idx}")
-    print(f"   Местоимений всего: {total_pronouns}")
-    if sentences:
-        for i, sent in enumerate(sentences[:3]):
-            print(f"   {i+1}. {sent.text[:100]}")
     ENGLISH_STOPWORDS = {
         'be', 'is', 'are', 'was', 'were', 'been', 'being',
         'have', 'has', 'had', 'having',
@@ -312,7 +300,6 @@ def parse_romani_text(text):
             filtered_sentences.append(sent)
     
     sentences = filtered_sentences
-    print(f"Предложений: {len(sentences)}")
     return sentences
 
 def clean_bible_text(text, lang):
@@ -436,7 +423,6 @@ def process_language_with_graph(pdf_path, lang, limit=50000, start_page=None):
         return None, None
     
     preview = text[:300].replace('\n', ' ')
-    print(preview + "...")
     
     # Применяем лимит
     text = text[:limit]
@@ -742,7 +728,6 @@ def analyze_vertex_quality_detailed(graph, sentences, output_file=None):
     
     isolated = [s for s in vertex_stats if s['degree'] == 0]
     if isolated:
-        print(f"\n   • Изолированные ({len(isolated)}):")
         for s in isolated[:10]:
             print(f"     - {s['vertex']}")
     
@@ -830,14 +815,9 @@ if __name__ == "__main__":
     missing_files = [f for f in files.values() if not os.path.exists(f)]
     graphs, metrics = analyze_all_languages()
 
-# В конце вашего pipeline.py добавьте:
-
 def integrate_extended_analysis():
-    """Integrate extended analysis with existing pipeline."""
     from extended_pipeline import GraphAnalysisPipeline
-    
-    # Используйте ваши существующие функции для получения текста
-    files = {
+        files = {
         "en": "Bible_eng.pdf",
         "ru": "Bible_rus.pdf",
         "rom": "Bible_rom.pdf"
@@ -846,30 +826,19 @@ def integrate_extended_analysis():
     pipeline = GraphAnalysisPipeline(output_dir="extended_analysis")
     
     for lang, filename in files.items():
-        if os.path.exists(filename):
-            print(f"\nProcessing {lang}...")
-            
-            # Extract text using your existing functions
+        if os.path.exists(filename):            
             if lang == "rom":
                 text = pdf_to_text(filename, lang=lang, start_page=34)
             else:
                 text = pdf_to_text(filename, lang=lang)
             
             if text:
-                # Run full analysis
                 result = pipeline.run_full_analysis(text[:50000], lang=lang)
                 
-                # Print summary
-                print(f"\nAnalysis complete for {lang}")
                 print(f"Human graph: {result['human_metrics']['num_vertices']} vertices, "
                       f"{result['human_metrics']['num_edges']} edges")
                 print(f"Bot graph: {result['bot_metrics']['num_vertices']} vertices, "
                       f"{result['bot_metrics']['num_edges']} edges")
 
-# Добавьте вызов в main
 if __name__ == "__main__":
-    # Ваш существующий код...
-    # graphs, metrics = analyze_all_languages()
-    
-    # Новый расширенный анализ
     integrate_extended_analysis()
