@@ -785,7 +785,7 @@ class TextMetrics:
         
 # Запуск ботов
 class AdvancedMultiBotPipeline:
-    def __init__(self, output_dir="advanced_multi_bot_results", max_sentences=None, timeout=300, text_sample_size=50000):
+    def __init__(self, output_dir="multi_bot_results", max_sentences=None, timeout=300, text_sample_size=50000):
         self.output_dir = output_dir
         self.max_sentences = max_sentences
         self.timeout = timeout
