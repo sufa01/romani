@@ -839,6 +839,3 @@ def integrate_extended_analysis():
                       f"{result['human_metrics']['num_edges']} edges")
                 print(f"Bot graph: {result['bot_metrics']['num_vertices']} vertices, "
                       f"{result['bot_metrics']['num_edges']} edges")
-
-if __name__ == "__main__":
-    integrate_extended_analysis()
