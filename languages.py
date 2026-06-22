@@ -817,12 +817,12 @@ if __name__ == "__main__":
 
 def integrate_extended_analysis():
     from extended_pipeline import GraphAnalysisPipeline
-        files = {
-        "en": "Bible_eng.pdf",
-        "ru": "Bible_rus.pdf",
-        "rom": "Bible_rom.pdf"
+    files = {
+    "en": "Bible_eng.pdf",
+    "ru": "Bible_rus.pdf",
+    "rom": "Bible_rom.pdf"
     }
-    
+
     pipeline = GraphAnalysisPipeline(output_dir="extended_analysis")
     
     for lang, filename in files.items():
