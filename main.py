@@ -1191,9 +1191,6 @@ class AdvancedMultiBotPipeline:
             ax.text(v + 1, i, f'{v:.1f}%', va='center', fontsize=8)
 
     def _plot_trajectory_pca(self, ax, all_comparisons, human_text):
-        if not SKLEARN_AVAILABLE:
-            ax.text(0.5, 0.5, 'scikit-learn not available\nfor PCA', ha='center', va='center')
-            return
         traj_analyzer = SemanticTrajectoryAnalyzer()
         human_traj = traj_analyzer.get_trajectory(human_text)
         if len(human_traj) == 0:
