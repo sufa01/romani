@@ -985,7 +985,7 @@ class AdvancedMultiBotPipeline:
                 'comparison': metrics_dict,
                 'bot_text': bot_text
             }
-            print(f"bot_info['name']}:")
+            print(f"{bot_info['name']}:")
             print(f"Composite Score: {metrics_dict['composite_score']*100:.1f}%")
             print(f"Trajectory Similarity: {traj_sim:.3f}")
             print(f"Repetition: {metrics_dict['repetition_ratio']*100:.1f}%")
