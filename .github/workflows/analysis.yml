@@ -37,4 +37,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: analysis-results
-          path: advanced_multi_bot_results/
+          path: multi_bot_results/
