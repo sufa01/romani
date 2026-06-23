@@ -874,13 +874,13 @@ class AdvancedMultiBotPipeline:
         return bot_texts
 
     def compare_all_bots(self, human_text: str, bot_texts: Dict, lang: str = 'en') -> Dict:
-    all_comparisons = {}
-    traj_analyzer = SemanticTrajectoryAnalyzer(word_embeddings=None)
-    human_traj = traj_analyzer.get_trajectory(human_text)
-    human_traj_metrics = traj_analyzer.compute_trajectory_metrics(human_traj)
-    human_network = self.net_analyzer.compute_all(human_text)
-    human_words = set(human_text.lower().split())
-    human_word_count = len(human_text.split())
+        all_comparisons = {}
+        traj_analyzer = SemanticTrajectoryAnalyzer(word_embeddings=None)
+        human_traj = traj_analyzer.get_trajectory(human_text)
+        human_traj_metrics = traj_analyzer.compute_trajectory_metrics(human_traj)
+        human_network = self.net_analyzer.compute_all(human_text)
+        human_words = set(human_text.lower().split())
+        human_word_count = len(human_text.split())
 
     for bot_name, bot_text in bot_texts.items():
         bot_info = self.bots[bot_name]
