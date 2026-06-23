@@ -1,0 +1,415 @@
+{
+  "markov": {
+    "name": "Markov Chain (3-gram)",
+    "complexity": "Very Low",
+    "type": "statistical",
+    "jaccard_similarity": 0.3780877651845394,
+    "levenshtein_similarity": 0.19499999999999995,
+    "perplexity": 1.0855217285196168,
+    "syntactic_complexity": 28.1656454041368,
+    "repetition_ratio": 0.2416976961163753,
+    "structural_similarity": 0.953692011743152,
+    "trajectory_similarity": 0.2671074358359558,
+    "trajectory_length": 158.86529541015625,
+    "trajectory_tortuosity": 155.22686767578125,
+    "network_assortativity": -0.11402845297220066,
+    "network_mean_degree": 4.54160363086233,
+    "network_mean_trans_prob": 0.5578059071729958,
+    "network_top_hubs": [
+      [
+        "\u0438",
+        376
+      ],
+      [
+        "\u043d\u0435",
+        180
+      ],
+      [
+        "\u0432",
+        127
+      ],
+      [
+        "\u0447\u0442\u043e",
+        102
+      ],
+      [
+        "\u043d\u0430",
+        70
+      ],
+      [
+        "\u043a\u0430\u043a",
+        65
+      ],
+      [
+        "\u043f\u043e\u0442\u043e\u043c\u0443",
+        54
+      ],
+      [
+        "\u0443",
+        46
+      ],
+      [
+        "\u0434\u043b\u044f",
+        46
+      ],
+      [
+        "\u044f",
+        44
+      ]
+    ]
+  },
+  "simple_lstm": {
+    "name": "Simple LSTM",
+    "complexity": "Low",
+    "type": "neural",
+    "jaccard_similarity": 0.35953420669577874,
+    "levenshtein_similarity": 0.19999999999999996,
+    "perplexity": 1.332161091660339,
+    "syntactic_complexity": 27.70949519496701,
+    "repetition_ratio": 0.2003880799056693,
+    "structural_similarity": 0.9800111672013803,
+    "trajectory_similarity": 0.23922766621124117,
+    "trajectory_length": 162.35693359375,
+    "trajectory_tortuosity": 152.40663146972656,
+    "network_assortativity": -0.06130157579137243,
+    "network_mean_degree": 4.8304,
+    "network_mean_trans_prob": 0.5446623093681917,
+    "network_top_hubs": [
+      [
+        "\u0438",
+        406
+      ],
+      [
+        "\u043d\u0435",
+        212
+      ],
+      [
+        "\u0432",
+        126
+      ],
+      [
+        "\u0447\u0442\u043e",
+        114
+      ],
+      [
+        "\u043d\u0430",
+        64
+      ],
+      [
+        "\u044f",
+        58
+      ],
+      [
+        "\u043a\u0442\u043e",
+        52
+      ],
+      [
+        "\u043e\u043d",
+        46
+      ],
+      [
+        "\u0441\u0435\u0440\u0434\u0446\u0435",
+        46
+      ],
+      [
+        "\u043f\u043e\u0442\u043e\u043c\u0443",
+        46
+      ]
+    ]
+  },
+  "better_lstm": {
+    "name": "Better LSTM (char-level)",
+    "complexity": "Medium",
+    "type": "neural",
+    "jaccard_similarity": 0.014682747771368642,
+    "levenshtein_similarity": 0.20899999999999996,
+    "perplexity": 1.0048419786168608,
+    "syntactic_complexity": 40.547553620943766,
+    "repetition_ratio": 0.030403233213924862,
+    "structural_similarity": 0.6126684519695922,
+    "trajectory_similarity": 0.1445882367430653,
+    "trajectory_length": 20.7094669342041,
+    "trajectory_tortuosity": 19.161195755004883,
+    "network_assortativity": 0.04730388939381711,
+    "network_mean_degree": 2.5555555555555554,
+    "network_mean_trans_prob": 0.7867132867132867,
+    "network_top_hubs": [
+      [
+        "\u0438",
+        63
+      ],
+      [
+        "\u0442",
+        18
+      ],
+      [
+        "\u0441\u044f",
+        18
+      ],
+      [
+        "\u043d\u0438",
+        16
+      ],
+      [
+        "\u043d\u0435",
+        12
+      ],
+      [
+        "\u043d\u043e",
+        12
+      ],
+      [
+        "\u0441\u0442",
+        12
+      ],
+      [
+        "\u0432\u043e",
+        12
+      ],
+      [
+        "\u0432",
+        10
+      ],
+      [
+        "2",
+        8
+      ]
+    ]
+  },
+  "hybrid": {
+    "name": "Hybrid N-gram+NN",
+    "complexity": "Medium-High",
+    "type": "hybrid",
+    "jaccard_similarity": 0.18454810495626822,
+    "levenshtein_similarity": 0.19899999999999995,
+    "perplexity": 1.0916697139073472,
+    "syntactic_complexity": 26.716249399461596,
+    "repetition_ratio": 0.4341196015877283,
+    "structural_similarity": 0.9666759270526487,
+    "trajectory_similarity": 0.21417665661839644,
+    "trajectory_length": 86.11634826660156,
+    "trajectory_tortuosity": 89.70236206054688,
+    "network_assortativity": -0.09906112725805391,
+    "network_mean_degree": 4.678071539657854,
+    "network_mean_trans_prob": 0.6254863813229572,
+    "network_top_hubs": [
+      [
+        "\u0438",
+        213
+      ],
+      [
+        "\u043d\u0435",
+        110
+      ],
+      [
+        "\u043a\u0430\u043a",
+        41
+      ],
+      [
+        "\u0432",
+        40
+      ],
+      [
+        "\u043d\u0430",
+        38
+      ],
+      [
+        "\u0443",
+        36
+      ],
+      [
+        "\u0447\u0442\u043e",
+        36
+      ],
+      [
+        "\u043f\u043e\u0442\u043e\u043c\u0443",
+        30
+      ],
+      [
+        "\u043e\u043d",
+        30
+      ],
+      [
+        "\u0441\u0435\u0440\u0434\u0446\u0435",
+        30
+      ]
+    ]
+  },
+  "cnn_attention": {
+    "name": "CNN+Attention",
+    "complexity": "Medium-High",
+    "type": "neural",
+    "jaccard_similarity": 0.14703303127740427,
+    "levenshtein_similarity": 0.21799999999999997,
+    "perplexity": 1.6230829842753416,
+    "syntactic_complexity": 24.591064210015176,
+    "repetition_ratio": 0.23878826898912262,
+    "structural_similarity": 0.9409652689606403,
+    "trajectory_similarity": 0.19193477379273907,
+    "trajectory_length": 86.90005493164062,
+    "trajectory_tortuosity": 81.32218170166016,
+    "network_assortativity": 0.14146266053545006,
+    "network_mean_degree": 5.968253968253968,
+    "network_mean_trans_prob": 0.49753208292201384,
+    "network_top_hubs": [
+      [
+        "\u043d\u0435",
+        234
+      ],
+      [
+        "\u0438",
+        178
+      ],
+      [
+        "\u043c\u043e\u0436\u0435\u0442",
+        72
+      ],
+      [
+        "\u0431\u0443\u0434\u0435\u0442",
+        66
+      ],
+      [
+        "\u0447\u0442\u043e",
+        58
+      ],
+      [
+        "\u043a\u0442\u043e",
+        52
+      ],
+      [
+        "\u0432",
+        40
+      ],
+      [
+        "\u0437\u043d\u0430\u0435\u0442",
+        38
+      ],
+      [
+        "\u043e\u043d",
+        36
+      ],
+      [
+        "\u044d\u0442\u043e",
+        36
+      ]
+    ]
+  },
+  "advanced_ngram": {
+    "name": "Advanced N-gram (GPT-2 alt)",
+    "complexity": "High",
+    "type": "hybrid",
+    "jaccard_similarity": 0.12106184364060676,
+    "levenshtein_similarity": 0.385,
+    "perplexity": 1.089270689674987,
+    "syntactic_complexity": 22.1050885614597,
+    "repetition_ratio": 0.6711672751177281,
+    "structural_similarity": 0.8867716608373089,
+    "trajectory_similarity": 0.22167221823587552,
+    "trajectory_length": 96.1431884765625,
+    "trajectory_tortuosity": 94.44659423828125,
+    "network_assortativity": -0.10123449265710394,
+    "network_mean_degree": 7.120567375886525,
+    "network_mean_trans_prob": 0.6687797147385103,
+    "network_top_hubs": [
+      [
+        "\u0438",
+        218
+      ],
+      [
+        "\u043d\u0435",
+        102
+      ],
+      [
+        "\u043a\u0430\u043a",
+        50
+      ],
+      [
+        "\u0443",
+        50
+      ],
+      [
+        "\u043d\u0430",
+        40
+      ],
+      [
+        "\u0432",
+        36
+      ],
+      [
+        "\u043a\u043e\u0433\u043e",
+        36
+      ],
+      [
+        "\u043f\u043e\u0442\u043e\u043c\u0443",
+        34
+      ],
+      [
+        "\u0447\u0442\u043e",
+        32
+      ],
+      [
+        "\u0441\u0435\u0440\u0434\u0446\u0435",
+        32
+      ]
+    ]
+  },
+  "statistical_lm": {
+    "name": "Statistical LM (BERT alt)",
+    "complexity": "High",
+    "type": "statistical",
+    "jaccard_similarity": 0.2540462427745665,
+    "levenshtein_similarity": 0.19899999999999995,
+    "perplexity": 1.1095089716489361,
+    "syntactic_complexity": 521.6645743197581,
+    "repetition_ratio": 0.18170057599405423,
+    "structural_similarity": 0.9376125929825019,
+    "trajectory_similarity": 0.1004419272089053,
+    "trajectory_length": 1.190696358680725,
+    "trajectory_tortuosity": 1.0,
+    "network_assortativity": -0.11843054546981058,
+    "network_mean_degree": 4.380848748639826,
+    "network_mean_trans_prob": 0.5386869871043376,
+    "network_top_hubs": [
+      [
+        "\u0438",
+        268
+      ],
+      [
+        "\u043d\u0435",
+        126
+      ],
+      [
+        "\u0432",
+        98
+      ],
+      [
+        "\u0447\u0442\u043e",
+        86
+      ],
+      [
+        "\u043d\u0430",
+        60
+      ],
+      [
+        "\u043a\u0442\u043e",
+        46
+      ],
+      [
+        "\u0430",
+        42
+      ],
+      [
+        "\u043a\u0430\u043a",
+        39
+      ],
+      [
+        "\u044f",
+        36
+      ],
+      [
+        "\u043e\u0442",
+        30
+      ]
+    ]
+  }
+}

@@ -1,0 +1,415 @@
+{
+  "markov": {
+    "name": "Markov Chain (3-gram)",
+    "complexity": "Very Low",
+    "type": "statistical",
+    "jaccard_similarity": 0.2060235704932344,
+    "levenshtein_similarity": 0.20699999999999996,
+    "perplexity": 1.1739595493693271,
+    "syntactic_complexity": 26.710630318826453,
+    "repetition_ratio": 0.12770923469011172,
+    "structural_similarity": 0.8126356938943256,
+    "trajectory_similarity": 0.17759807096064953,
+    "trajectory_length": 80.3736572265625,
+    "trajectory_tortuosity": 57.79761505126953,
+    "network_assortativity": -0.1657077060628466,
+    "network_mean_degree": 4.673728813559322,
+    "network_mean_trans_prob": 0.49267782426778245,
+    "network_top_hubs": [
+      [
+        "the",
+        156
+      ],
+      [
+        "and",
+        68
+      ],
+      [
+        "you",
+        62
+      ],
+      [
+        "of",
+        56
+      ],
+      [
+        "to",
+        52
+      ],
+      [
+        "your",
+        50
+      ],
+      [
+        "in",
+        44
+      ],
+      [
+        "for",
+        44
+      ],
+      [
+        "my",
+        38
+      ],
+      [
+        "will",
+        30
+      ]
+    ]
+  },
+  "simple_lstm": {
+    "name": "Simple LSTM",
+    "complexity": "Low",
+    "type": "neural",
+    "jaccard_similarity": 0.38089005235602097,
+    "levenshtein_similarity": 0.242,
+    "perplexity": 1.6151342661604924,
+    "syntactic_complexity": 25.09642792682964,
+    "repetition_ratio": 0.23353510101380867,
+    "structural_similarity": 0.9512463059436727,
+    "trajectory_similarity": 0.21311109202619966,
+    "trajectory_length": 177.88754272460938,
+    "trajectory_tortuosity": 157.04469299316406,
+    "network_assortativity": -0.08020786023070713,
+    "network_mean_degree": 6.919908466819222,
+    "network_mean_trans_prob": 0.43460964694181997,
+    "network_top_hubs": [
+      [
+        "the",
+        518
+      ],
+      [
+        "of",
+        210
+      ],
+      [
+        "to",
+        202
+      ],
+      [
+        "and",
+        158
+      ],
+      [
+        "your",
+        118
+      ],
+      [
+        "in",
+        112
+      ],
+      [
+        "you",
+        108
+      ],
+      [
+        "my",
+        92
+      ],
+      [
+        "will",
+        80
+      ],
+      [
+        "i",
+        75
+      ]
+    ]
+  },
+  "better_lstm": {
+    "name": "Better LSTM (char-level)",
+    "complexity": "Medium",
+    "type": "neural",
+    "jaccard_similarity": 0.017903767251025736,
+    "levenshtein_similarity": 0.20999999999999996,
+    "perplexity": 1.011606654680171,
+    "syntactic_complexity": 39.48673222470141,
+    "repetition_ratio": 0.04448755748405281,
+    "structural_similarity": 0.5642459998524576,
+    "trajectory_similarity": 0.131146103910343,
+    "trajectory_length": 26.801799774169922,
+    "trajectory_tortuosity": 20.524921417236328,
+    "network_assortativity": -0.06543950159804811,
+    "network_mean_degree": 2.954337899543379,
+    "network_mean_trans_prob": 0.6833073322932918,
+    "network_top_hubs": [
+      [
+        "he",
+        34
+      ],
+      [
+        "t",
+        32
+      ],
+      [
+        "s",
+        32
+      ],
+      [
+        "o",
+        31
+      ],
+      [
+        "i",
+        28
+      ],
+      [
+        "y",
+        26
+      ],
+      [
+        "the",
+        26
+      ],
+      [
+        "an",
+        20
+      ],
+      [
+        "d",
+        20
+      ],
+      [
+        "f",
+        20
+      ]
+    ]
+  },
+  "hybrid": {
+    "name": "Hybrid N-gram+NN",
+    "complexity": "Medium-High",
+    "type": "hybrid",
+    "jaccard_similarity": 0.22653862941946748,
+    "levenshtein_similarity": 0.21599999999999997,
+    "perplexity": 1.208089734789489,
+    "syntactic_complexity": 23.597696779764995,
+    "repetition_ratio": 0.26789249039997864,
+    "structural_similarity": 0.895321427439513,
+    "trajectory_similarity": 0.20079148239386116,
+    "trajectory_length": 104.94027709960938,
+    "trajectory_tortuosity": 88.95890045166016,
+    "network_assortativity": -0.1696896688527124,
+    "network_mean_degree": 5.795761078998074,
+    "network_mean_trans_prob": 0.47697974217311234,
+    "network_top_hubs": [
+      [
+        "the",
+        192
+      ],
+      [
+        "and",
+        106
+      ],
+      [
+        "of",
+        86
+      ],
+      [
+        "to",
+        82
+      ],
+      [
+        "your",
+        78
+      ],
+      [
+        "will",
+        70
+      ],
+      [
+        "my",
+        52
+      ],
+      [
+        "for",
+        50
+      ],
+      [
+        "you",
+        50
+      ],
+      [
+        "i",
+        50
+      ]
+    ]
+  },
+  "cnn_attention": {
+    "name": "CNN+Attention",
+    "complexity": "Medium-High",
+    "type": "neural",
+    "jaccard_similarity": 0.12963771278917502,
+    "levenshtein_similarity": 0.236,
+    "perplexity": 2.0766320399358396,
+    "syntactic_complexity": 22.567383937021706,
+    "repetition_ratio": 0.33096773969683424,
+    "structural_similarity": 0.9571702669126464,
+    "trajectory_similarity": 0.17009396534280444,
+    "trajectory_length": 74.58846282958984,
+    "trajectory_tortuosity": 65.0979995727539,
+    "network_assortativity": 0.026749448941301397,
+    "network_mean_degree": 10.127946127946128,
+    "network_mean_trans_prob": 0.40272108843537413,
+    "network_top_hubs": [
+      [
+        "the",
+        326
+      ],
+      [
+        "of",
+        120
+      ],
+      [
+        "to",
+        102
+      ],
+      [
+        "god",
+        94
+      ],
+      [
+        "lord",
+        74
+      ],
+      [
+        "your",
+        72
+      ],
+      [
+        "and",
+        62
+      ],
+      [
+        "will",
+        60
+      ],
+      [
+        "my",
+        56
+      ],
+      [
+        "choirmaster:",
+        54
+      ]
+    ]
+  },
+  "advanced_ngram": {
+    "name": "Advanced N-gram (GPT-2 alt)",
+    "complexity": "High",
+    "type": "hybrid",
+    "jaccard_similarity": 0.2466171977302488,
+    "levenshtein_similarity": 0.239,
+    "perplexity": 1.254006634704893,
+    "syntactic_complexity": 26.57076710033387,
+    "repetition_ratio": 0.1707253926508022,
+    "structural_similarity": 0.8647566433863569,
+    "trajectory_similarity": 0.20850477284462757,
+    "trajectory_length": 105.99048614501953,
+    "trajectory_tortuosity": 84.0588150024414,
+    "network_assortativity": -0.15951432931350454,
+    "network_mean_degree": 5.323893805309734,
+    "network_mean_trans_prob": 0.47719594594594594,
+    "network_top_hubs": [
+      [
+        "the",
+        164
+      ],
+      [
+        "of",
+        96
+      ],
+      [
+        "my",
+        90
+      ],
+      [
+        "and",
+        86
+      ],
+      [
+        "to",
+        72
+      ],
+      [
+        "o",
+        58
+      ],
+      [
+        "who",
+        54
+      ],
+      [
+        "for",
+        52
+      ],
+      [
+        "you",
+        52
+      ],
+      [
+        "from",
+        46
+      ]
+    ]
+  },
+  "statistical_lm": {
+    "name": "Statistical LM (BERT alt)",
+    "complexity": "High",
+    "type": "statistical",
+    "jaccard_similarity": 0.25742574257425743,
+    "levenshtein_similarity": 0.21799999999999997,
+    "perplexity": 1.3034931179892675,
+    "syntactic_complexity": 514.3218984733072,
+    "repetition_ratio": 0.19854392613122976,
+    "structural_similarity": 0.9259574619379844,
+    "trajectory_similarity": 0.1421711931239269,
+    "trajectory_length": 1.2857871055603027,
+    "trajectory_tortuosity": 1.0,
+    "network_assortativity": -0.13480569375133167,
+    "network_mean_degree": 6.3619047619047615,
+    "network_mean_trans_prob": 0.40738341968911923,
+    "network_top_hubs": [
+      [
+        "the",
+        254
+      ],
+      [
+        "of",
+        124
+      ],
+      [
+        "and",
+        112
+      ],
+      [
+        "you",
+        82
+      ],
+      [
+        "my",
+        80
+      ],
+      [
+        "in",
+        76
+      ],
+      [
+        "to",
+        76
+      ],
+      [
+        "your",
+        74
+      ],
+      [
+        "i",
+        70
+      ],
+      [
+        "o",
+        64
+      ]
+    ]
+  }
+}

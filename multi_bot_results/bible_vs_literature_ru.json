@@ -1,0 +1,65 @@
+[
+  {
+    "bot": "Advanced N-gram (GPT-2 alt)",
+    "bible_score": 0,
+    "lit_score": 0,
+    "bible_traj": 0.22167221823587552,
+    "lit_traj": 0.27742571854437653,
+    "bible_repet": 67.11672751177281,
+    "lit_repet": 29.98817020908364
+  },
+  {
+    "bot": "Better LSTM (char-level)",
+    "bible_score": 0,
+    "lit_score": 0,
+    "bible_traj": 0.1445882367430653,
+    "lit_traj": 0.15661630237670138,
+    "bible_repet": 3.0403233213924863,
+    "lit_repet": 2.491408934707904
+  },
+  {
+    "bot": "CNN+Attention",
+    "bible_score": 0,
+    "lit_score": 0,
+    "bible_traj": 0.19193477379273907,
+    "lit_traj": 0.21226329216326426,
+    "bible_repet": 23.878826898912262,
+    "lit_repet": 20.98947732506656
+  },
+  {
+    "bot": "Hybrid N-gram+NN",
+    "bible_score": 0,
+    "lit_score": 0,
+    "bible_traj": 0.21417665661839644,
+    "lit_traj": 0.2823123448719621,
+    "bible_repet": 43.41196015877283,
+    "lit_repet": 28.686325846907895
+  },
+  {
+    "bot": "Markov Chain (3-gram)",
+    "bible_score": 0,
+    "lit_score": 0,
+    "bible_traj": 0.2671074358359558,
+    "lit_traj": 0.28771402648733885,
+    "bible_repet": 24.16976961163753,
+    "lit_repet": 41.11166726070004
+  },
+  {
+    "bot": "Simple LSTM",
+    "bible_score": 0,
+    "lit_score": 0,
+    "bible_traj": 0.23922766621124117,
+    "lit_traj": 0.270213477576547,
+    "bible_repet": 20.03880799056693,
+    "lit_repet": 25.395918674297953
+  },
+  {
+    "bot": "Statistical LM (BERT alt)",
+    "bible_score": 0,
+    "lit_score": 0,
+    "bible_traj": 0.1004419272089053,
+    "lit_traj": 0.13246412963972753,
+    "bible_repet": 18.170057599405425,
+    "lit_repet": 18.34717342303517
+  }
+]
