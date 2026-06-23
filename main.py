@@ -882,82 +882,82 @@ class AdvancedMultiBotPipeline:
         human_words = set(human_text.lower().split())
         human_word_count = len(human_text.split())
 
-    for bot_name, bot_text in bot_texts.items():
-        bot_info = self.bots[bot_name]
-        bot_words = set(bot_text.lower().split())
-        bot_word_count = len(bot_text.split())
-        intersection = len(human_words & bot_words)
-        union = len(human_words | bot_words)
-        jaccard = intersection / union if union > 0 else 0
-        metrics_dict = {
-            'jaccard_similarity': jaccard,
-            'vocabulary_overlap': intersection / len(human_words) if human_words else 0
-        }
-        try:
-            metrics_dict['perplexity'] = self.metrics_calc.calculate_perplexity(bot_text)
-        except:
-            metrics_dict['perplexity'] = float('inf')
-        try:
-            metrics_dict['levenshtein_similarity'] = self.metrics_calc.calculate_levenshtein_similarity(human_text, bot_text)
-        except:
-            metrics_dict['levenshtein_similarity'] = 0
-        try:
-            complexity, complexity_details = self.metrics_calc.calculate_syntactic_complexity(bot_text)
-            metrics_dict['syntactic_complexity'] = complexity
-            metrics_dict['complexity_details'] = complexity_details
-        except:
-            metrics_dict['syntactic_complexity'] = 0
-            metrics_dict['complexity_details'] = {}
-        try:
-            rep_ratio, rep_details = self.metrics_calc.calculate_repetition_ratio(bot_text)
-            metrics_dict['repetition_ratio'] = rep_ratio
-            metrics_dict['repetition_details'] = rep_details
-        except:
-            metrics_dict['repetition_ratio'] = 0
-            metrics_dict['repetition_details'] = {}
-        bot_traj = traj_analyzer.get_trajectory(bot_text)
-        bot_traj_metrics = traj_analyzer.compute_trajectory_metrics(bot_traj)
-        traj_sim = traj_analyzer.trajectory_similarity(human_traj, bot_traj)
-        metrics_dict['trajectory_length'] = bot_traj_metrics['trajectory_length']
-        metrics_dict['trajectory_mean_speed'] = bot_traj_metrics['mean_speed']
-        metrics_dict['trajectory_tortuosity'] = bot_traj_metrics['tortuosity']
-        metrics_dict['trajectory_similarity'] = traj_sim
-        human_unique_ratio = len(human_words) / human_word_count if human_word_count > 0 else 0
-        bot_unique_ratio = len(bot_words) / bot_word_count if bot_word_count > 0 else 0
-        structural_sim = 1 - abs(human_unique_ratio - bot_unique_ratio)
-        metrics_dict['structural_similarity'] = structural_sim
-        bot_network = self.net_analyzer.compute_all(bot_text)
-        metrics_dict['network'] = {'human': human_network, 'bot': bot_network}
-        human_metrics = {
-            'num_vertices': human_word_count,
-            'num_edges': human_word_count * 2,
-            'density': 0.01,
-            'num_words': human_word_count,
-            'unique_words': len(human_words),
-            'avg_word_length': np.mean([len(w) for w in human_text.split()]) if human_text.split() else 0
-        }
-        bot_metrics = {
-            'num_vertices': bot_word_count,
-            'num_edges': bot_word_count * 2,
-            'density': 0.01,
-            'num_words': bot_word_count,
-            'unique_words': len(bot_words),
-            'avg_word_length': np.mean([len(w) for w in bot_text.split()]) if bot_text.split() else 0
-        }
-        all_comparisons[bot_name] = {
-            'name': bot_info['name'],
-            'complexity': bot_info['complexity'],
-            'type': bot_info['type'],
-            'human_metrics': human_metrics,
-            'bot_metrics': bot_metrics,
-            'comparison': metrics_dict,
-            'bot_text': bot_text
-        }
-        print(f"{bot_info['name']}:")
-        print(f"Trajectory Similarity: {traj_sim:.3f}")
-        print(f"Repetition: {metrics_dict['repetition_ratio']*100:.1f}%")
-        print(f"Network Assortativity: {bot_network['assortativity']:.3f} (human: {human_network['assortativity']:.3f})")
-    return all_comparisons
+        for bot_name, bot_text in bot_texts.items():
+            bot_info = self.bots[bot_name]
+            bot_words = set(bot_text.lower().split())
+            bot_word_count = len(bot_text.split())
+            intersection = len(human_words & bot_words)
+            union = len(human_words | bot_words)
+            jaccard = intersection / union if union > 0 else 0
+            metrics_dict = {
+                'jaccard_similarity': jaccard,
+                'vocabulary_overlap': intersection / len(human_words) if human_words else 0
+            }
+            try:
+                metrics_dict['perplexity'] = self.metrics_calc.calculate_perplexity(bot_text)
+            except:
+                metrics_dict['perplexity'] = float('inf')
+            try:
+                metrics_dict['levenshtein_similarity'] = self.metrics_calc.calculate_levenshtein_similarity(human_text, bot_text)
+            except:
+                metrics_dict['levenshtein_similarity'] = 0
+            try:
+                complexity, complexity_details = self.metrics_calc.calculate_syntactic_complexity(bot_text)
+                metrics_dict['syntactic_complexity'] = complexity
+                metrics_dict['complexity_details'] = complexity_details
+            except:
+                metrics_dict['syntactic_complexity'] = 0
+                metrics_dict['complexity_details'] = {}
+            try:
+                rep_ratio, rep_details = self.metrics_calc.calculate_repetition_ratio(bot_text)
+                metrics_dict['repetition_ratio'] = rep_ratio
+                metrics_dict['repetition_details'] = rep_details
+            except:
+                metrics_dict['repetition_ratio'] = 0
+                metrics_dict['repetition_details'] = {}
+            bot_traj = traj_analyzer.get_trajectory(bot_text)
+            bot_traj_metrics = traj_analyzer.compute_trajectory_metrics(bot_traj)
+            traj_sim = traj_analyzer.trajectory_similarity(human_traj, bot_traj)
+            metrics_dict['trajectory_length'] = bot_traj_metrics['trajectory_length']
+            metrics_dict['trajectory_mean_speed'] = bot_traj_metrics['mean_speed']
+            metrics_dict['trajectory_tortuosity'] = bot_traj_metrics['tortuosity']
+            metrics_dict['trajectory_similarity'] = traj_sim
+            human_unique_ratio = len(human_words) / human_word_count if human_word_count > 0 else 0
+            bot_unique_ratio = len(bot_words) / bot_word_count if bot_word_count > 0 else 0
+            structural_sim = 1 - abs(human_unique_ratio - bot_unique_ratio)
+            metrics_dict['structural_similarity'] = structural_sim
+            bot_network = self.net_analyzer.compute_all(bot_text)
+            metrics_dict['network'] = {'human': human_network, 'bot': bot_network}
+            human_metrics = {
+                'num_vertices': human_word_count,
+                'num_edges': human_word_count * 2,
+                'density': 0.01,
+                'num_words': human_word_count,
+                'unique_words': len(human_words),
+                'avg_word_length': np.mean([len(w) for w in human_text.split()]) if human_text.split() else 0
+            }
+            bot_metrics = {
+                'num_vertices': bot_word_count,
+                'num_edges': bot_word_count * 2,
+                'density': 0.01,
+                'num_words': bot_word_count,
+                'unique_words': len(bot_words),
+                'avg_word_length': np.mean([len(w) for w in bot_text.split()]) if bot_text.split() else 0
+            }
+            all_comparisons[bot_name] = {
+                'name': bot_info['name'],
+                'complexity': bot_info['complexity'],
+                'type': bot_info['type'],
+                'human_metrics': human_metrics,
+                'bot_metrics': bot_metrics,
+                'comparison': metrics_dict,
+                'bot_text': bot_text
+            }
+            print(f"{bot_info['name']}:")
+            print(f"Trajectory Similarity: {traj_sim:.3f}")
+            print(f"Repetition: {metrics_dict['repetition_ratio']*100:.1f}%")
+            print(f"Network Assortativity: {bot_network['assortativity']:.3f} (human: {human_network['assortativity']:.3f})")
+        return all_comparisons
 
     def visualize_advanced_comparison(self, all_comparisons: Dict, lang: str, human_text: str = ""):
         fig = plt.figure(figsize=(18, 12))
