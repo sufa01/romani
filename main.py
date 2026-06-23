@@ -971,8 +971,6 @@ class AdvancedMultiBotPipeline:
         self._plot_similarity_scores(ax4, all_comparisons)
         ax5 = fig.add_subplot(2, 3, 5)
         self._plot_repetition(ax5, all_comparisons)
-        ax6 = fig.add_subplot(2, 3, 6)
-        self._plot_complexity_quality(ax6, all_comparisons)
         plt.suptitle(f'Multi-Bot Analysis with Semantic Trajectories: {lang.upper()}', fontsize=16, fontweight='bold')
         plt.tight_layout()
         output_file = os.path.join(self.output_dir, f'advanced_comparison_{lang}.png')
