@@ -957,7 +957,7 @@ class AdvancedMultiBotPipeline:
             print(f"Trajectory Similarity: {traj_sim:.3f}")
             print(f"Repetition: {metrics_dict['repetition_ratio']*100:.1f}%")
             print(f"Network Assortativity: {bot_network['assortativity']:.3f} (human: {human_network['assortativity']:.3f})")
-            return all_comparisons
+        return all_comparisons
 
     def visualize_advanced_comparison(self, all_comparisons: Dict, lang: str, human_text: str = ""):
         fig = plt.figure(figsize=(18, 12))
