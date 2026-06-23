@@ -752,39 +752,6 @@ class TextMetrics:
         metrics['trigram_repetition'] = repeated_trigrams / len(trigram_freq) if trigram_freq else 0
         overall_repetition = np.mean(list(metrics.values()))
         return overall_repetition, metrics
-
-    @staticmethod
-    def calculate_composite_score(metrics_dict, lang='en'):
-        weights = {
-            'en': {'jaccard': 0.20, 'levenshtein': 0.20, 'complexity': 0.15,
-                   'anti_repetition': 0.15, 'perplexity_score': 0.10,
-                   'trajectory_similarity': 0.20},
-            'ru': {'jaccard': 0.15, 'levenshtein': 0.20, 'complexity': 0.25,
-                   'anti_repetition': 0.10, 'perplexity_score': 0.10,
-                   'trajectory_similarity': 0.20},
-            'rom': {'jaccard': 0.15, 'levenshtein': 0.15, 'complexity': 0.20,
-                    'anti_repetition': 0.20, 'perplexity_score': 0.10,
-                    'trajectory_similarity': 0.20}
-        }
-        w = weights.get(lang, weights['en'])
-        score = 0.0
-        score += metrics_dict.get('jaccard_similarity', 0) * w['jaccard']
-        score += metrics_dict.get('levenshtein_similarity', 0) * w['levenshtein']
-        complexity = metrics_dict.get('syntactic_complexity', 0)
-        complexity_norm = min(complexity / 20, 1.0)
-        score += complexity_norm * w['complexity']
-        repetition = metrics_dict.get('repetition_ratio', 0)
-        anti_rep = 1 - min(repetition * 2, 1.0)
-        score += anti_rep * w['anti_repetition']
-        perplexity = metrics_dict.get('perplexity', float('inf'))
-        if perplexity != float('inf') and perplexity > 0:
-            perplexity_score = min(100 / perplexity, 1.0)
-        else:
-            perplexity_score = 0.0
-        score += perplexity_score * w['perplexity_score']
-        traj_sim = metrics_dict.get('trajectory_similarity', 0.0)
-        score += traj_sim * w['trajectory_similarity']
-        return score
         
 # Запуск ботов
 class AdvancedMultiBotPipeline:
@@ -907,119 +874,111 @@ class AdvancedMultiBotPipeline:
         return bot_texts
 
     def compare_all_bots(self, human_text: str, bot_texts: Dict, lang: str = 'en') -> Dict:
-        all_comparisons = {}
-        traj_analyzer = SemanticTrajectoryAnalyzer(word_embeddings=None)
-        human_traj = traj_analyzer.get_trajectory(human_text)
-        human_traj_metrics = traj_analyzer.compute_trajectory_metrics(human_traj)
-        human_network = self.net_analyzer.compute_all(human_text)
-        human_words = set(human_text.lower().split())
-        human_word_count = len(human_text.split())
+    all_comparisons = {}
+    traj_analyzer = SemanticTrajectoryAnalyzer(word_embeddings=None)
+    human_traj = traj_analyzer.get_trajectory(human_text)
+    human_traj_metrics = traj_analyzer.compute_trajectory_metrics(human_traj)
+    human_network = self.net_analyzer.compute_all(human_text)
+    human_words = set(human_text.lower().split())
+    human_word_count = len(human_text.split())
 
-        for bot_name, bot_text in bot_texts.items():
-            bot_info = self.bots[bot_name]
-            bot_words = set(bot_text.lower().split())
-            bot_word_count = len(bot_text.split())
-            intersection = len(human_words & bot_words)
-            union = len(human_words | bot_words)
-            jaccard = intersection / union if union > 0 else 0
-            metrics_dict = {
-                'jaccard_similarity': jaccard,
-                'vocabulary_overlap': intersection / len(human_words) if human_words else 0
-            }
-            try:
-                metrics_dict['perplexity'] = self.metrics_calc.calculate_perplexity(bot_text)
-            except:
-                metrics_dict['perplexity'] = float('inf')
-            try:
-                metrics_dict['levenshtein_similarity'] = self.metrics_calc.calculate_levenshtein_similarity(human_text, bot_text)
-            except:
-                metrics_dict['levenshtein_similarity'] = 0
-            try:
-                complexity, complexity_details = self.metrics_calc.calculate_syntactic_complexity(bot_text)
-                metrics_dict['syntactic_complexity'] = complexity
-                metrics_dict['complexity_details'] = complexity_details
-            except:
-                metrics_dict['syntactic_complexity'] = 0
-                metrics_dict['complexity_details'] = {}
-            try:
-                rep_ratio, rep_details = self.metrics_calc.calculate_repetition_ratio(bot_text)
-                metrics_dict['repetition_ratio'] = rep_ratio
-                metrics_dict['repetition_details'] = rep_details
-            except:
-                metrics_dict['repetition_ratio'] = 0
-                metrics_dict['repetition_details'] = {}
-            bot_traj = traj_analyzer.get_trajectory(bot_text)
-            bot_traj_metrics = traj_analyzer.compute_trajectory_metrics(bot_traj)
-            traj_sim = traj_analyzer.trajectory_similarity(human_traj, bot_traj)
-            metrics_dict['trajectory_length'] = bot_traj_metrics['trajectory_length']
-            metrics_dict['trajectory_mean_speed'] = bot_traj_metrics['mean_speed']
-            metrics_dict['trajectory_tortuosity'] = bot_traj_metrics['tortuosity']
-            metrics_dict['trajectory_similarity'] = traj_sim
-            human_unique_ratio = len(human_words) / human_word_count if human_word_count > 0 else 0
-            bot_unique_ratio = len(bot_words) / bot_word_count if bot_word_count > 0 else 0
-            structural_sim = 1 - abs(human_unique_ratio - bot_unique_ratio)
-            metrics_dict['structural_similarity'] = structural_sim
-            bot_network = self.net_analyzer.compute_all(bot_text)
-            metrics_dict['network'] = {'human': human_network, 'bot': bot_network}
-            metrics_dict['composite_score'] = self.metrics_calc.calculate_composite_score(metrics_dict, lang)
-            human_metrics = {
-                'num_vertices': human_word_count,
-                'num_edges': human_word_count * 2,
-                'density': 0.01,
-                'num_words': human_word_count,
-                'unique_words': len(human_words),
-                'avg_word_length': np.mean([len(w) for w in human_text.split()]) if human_text.split() else 0
-            }
-            bot_metrics = {
-                'num_vertices': bot_word_count,
-                'num_edges': bot_word_count * 2,
-                'density': 0.01,
-                'num_words': bot_word_count,
-                'unique_words': len(bot_words),
-                'avg_word_length': np.mean([len(w) for w in bot_text.split()]) if bot_text.split() else 0
-            }
-            all_comparisons[bot_name] = {
-                'name': bot_info['name'],
-                'complexity': bot_info['complexity'],
-                'type': bot_info['type'],
-                'human_metrics': human_metrics,
-                'bot_metrics': bot_metrics,
-                'comparison': metrics_dict,
-                'bot_text': bot_text
-            }
-            print(f"{bot_info['name']}:")
-            print(f"Composite Score: {metrics_dict['composite_score']*100:.1f}%")
-            print(f"Trajectory Similarity: {traj_sim:.3f}")
-            print(f"Repetition: {metrics_dict['repetition_ratio']*100:.1f}%")
-            print(f"Network Assortativity: {bot_network['assortativity']:.3f} (human: {human_network['assortativity']:.3f})")
-        return all_comparisons
+    for bot_name, bot_text in bot_texts.items():
+        bot_info = self.bots[bot_name]
+        bot_words = set(bot_text.lower().split())
+        bot_word_count = len(bot_text.split())
+        intersection = len(human_words & bot_words)
+        union = len(human_words | bot_words)
+        jaccard = intersection / union if union > 0 else 0
+        metrics_dict = {
+            'jaccard_similarity': jaccard,
+            'vocabulary_overlap': intersection / len(human_words) if human_words else 0
+        }
+        try:
+            metrics_dict['perplexity'] = self.metrics_calc.calculate_perplexity(bot_text)
+        except:
+            metrics_dict['perplexity'] = float('inf')
+        try:
+            metrics_dict['levenshtein_similarity'] = self.metrics_calc.calculate_levenshtein_similarity(human_text, bot_text)
+        except:
+            metrics_dict['levenshtein_similarity'] = 0
+        try:
+            complexity, complexity_details = self.metrics_calc.calculate_syntactic_complexity(bot_text)
+            metrics_dict['syntactic_complexity'] = complexity
+            metrics_dict['complexity_details'] = complexity_details
+        except:
+            metrics_dict['syntactic_complexity'] = 0
+            metrics_dict['complexity_details'] = {}
+        try:
+            rep_ratio, rep_details = self.metrics_calc.calculate_repetition_ratio(bot_text)
+            metrics_dict['repetition_ratio'] = rep_ratio
+            metrics_dict['repetition_details'] = rep_details
+        except:
+            metrics_dict['repetition_ratio'] = 0
+            metrics_dict['repetition_details'] = {}
+        bot_traj = traj_analyzer.get_trajectory(bot_text)
+        bot_traj_metrics = traj_analyzer.compute_trajectory_metrics(bot_traj)
+        traj_sim = traj_analyzer.trajectory_similarity(human_traj, bot_traj)
+        metrics_dict['trajectory_length'] = bot_traj_metrics['trajectory_length']
+        metrics_dict['trajectory_mean_speed'] = bot_traj_metrics['mean_speed']
+        metrics_dict['trajectory_tortuosity'] = bot_traj_metrics['tortuosity']
+        metrics_dict['trajectory_similarity'] = traj_sim
+        human_unique_ratio = len(human_words) / human_word_count if human_word_count > 0 else 0
+        bot_unique_ratio = len(bot_words) / bot_word_count if bot_word_count > 0 else 0
+        structural_sim = 1 - abs(human_unique_ratio - bot_unique_ratio)
+        metrics_dict['structural_similarity'] = structural_sim
+        bot_network = self.net_analyzer.compute_all(bot_text)
+        metrics_dict['network'] = {'human': human_network, 'bot': bot_network}
+        human_metrics = {
+            'num_vertices': human_word_count,
+            'num_edges': human_word_count * 2,
+            'density': 0.01,
+            'num_words': human_word_count,
+            'unique_words': len(human_words),
+            'avg_word_length': np.mean([len(w) for w in human_text.split()]) if human_text.split() else 0
+        }
+        bot_metrics = {
+            'num_vertices': bot_word_count,
+            'num_edges': bot_word_count * 2,
+            'density': 0.01,
+            'num_words': bot_word_count,
+            'unique_words': len(bot_words),
+            'avg_word_length': np.mean([len(w) for w in bot_text.split()]) if bot_text.split() else 0
+        }
+        all_comparisons[bot_name] = {
+            'name': bot_info['name'],
+            'complexity': bot_info['complexity'],
+            'type': bot_info['type'],
+            'human_metrics': human_metrics,
+            'bot_metrics': bot_metrics,
+            'comparison': metrics_dict,
+            'bot_text': bot_text
+        }
+        print(f"{bot_info['name']}:")
+        print(f"Trajectory Similarity: {traj_sim:.3f}")
+        print(f"Repetition: {metrics_dict['repetition_ratio']*100:.1f}%")
+        print(f"Network Assortativity: {bot_network['assortativity']:.3f} (human: {human_network['assortativity']:.3f})")
+    return all_comparisons
 
     def visualize_advanced_comparison(self, all_comparisons: Dict, lang: str, human_text: str = ""):
-        fig = plt.figure(figsize=(24, 16))
-        ax1 = fig.add_subplot(2, 4, 1, projection='polar')
+        fig = plt.figure(figsize=(18, 12))
+        ax1 = fig.add_subplot(2, 3, 1, projection='polar')
         self._plot_radar_chart(ax1, all_comparisons)
-        ax2 = fig.add_subplot(2, 4, 2)
+        ax2 = fig.add_subplot(2, 3, 2)
         self._plot_heatmap(ax2, all_comparisons)
-        ax3 = fig.add_subplot(2, 4, 3)
-        self._plot_composite_scores(ax3, all_comparisons)
-        ax4 = fig.add_subplot(2, 4, 4)
-        self._plot_trajectory_pca(ax4, all_comparisons, human_text)
-        ax5 = fig.add_subplot(2, 4, 5)
-        self._plot_similarity_scores(ax5, all_comparisons)
-        ax6 = fig.add_subplot(2, 4, 6)
-        self._plot_repetition(ax6, all_comparisons)
-        ax7 = fig.add_subplot(2, 4, 7)
-        self._plot_complexity_quality(ax7, all_comparisons)
-        ax8 = fig.add_subplot(2, 4, 8)
-        ax8.axis('off')
-        self._plot_summary_table(ax8, all_comparisons)
-        plt.suptitle(f'Advanced Multi-Bot Analysis with Semantic Trajectories: {lang.upper()}', fontsize=16, fontweight='bold')
+        ax3 = fig.add_subplot(2, 3, 3)
+        self._plot_trajectory_pca(ax3, all_comparisons, human_text)
+        ax4 = fig.add_subplot(2, 3, 4)
+        self._plot_similarity_scores(ax4, all_comparisons)
+        ax5 = fig.add_subplot(2, 3, 5)
+        self._plot_repetition(ax5, all_comparisons)
+        ax6 = fig.add_subplot(2, 3, 6)
+        self._plot_complexity_quality(ax6, all_comparisons)
+        plt.suptitle(f'Multi-Bot Analysis with Semantic Trajectories: {lang.upper()}', fontsize=16, fontweight='bold')
         plt.tight_layout()
         output_file = os.path.join(self.output_dir, f'advanced_comparison_{lang}.png')
         plt.savefig(output_file, dpi=150, bbox_inches='tight')
         plt.close()
         print(f"Visualization saved to {output_file}")
-        print("Абсолютный путь:", os.path.abspath(output_file))
 
     def visualize_network_metrics(self, all_comparisons: Dict, lang: str):
         fig, axes = plt.subplots(2, 3, figsize=(20, 14))
@@ -1180,19 +1139,6 @@ class AdvancedMultiBotPipeline:
         plt.colorbar(im, ax=ax)
         ax.set_title('Metrics Heatmap', fontsize=10)
 
-    def _plot_composite_scores(self, ax, all_comparisons):
-        bots_sorted = sorted(all_comparisons.items(), key=lambda x: x[1]['comparison'].get('composite_score', 0))
-        names = [self.bots[bn]['name'][:20] for bn, _ in bots_sorted]
-        scores = [data['comparison'].get('composite_score', 0) * 100 for _, data in bots_sorted]
-        colors = [self.bots[bn]['color'] for bn, _ in bots_sorted]
-        ax.barh(range(len(names)), scores, color=colors, alpha=0.8)
-        ax.set_yticks(range(len(names)))
-        ax.set_yticklabels(names, fontsize=8)
-        ax.set_xlabel('Composite Score (%)')
-        ax.set_title('Overall Quality Score')
-        for i, v in enumerate(scores):
-            ax.text(v + 1, i, f'{v:.1f}%', va='center', fontsize=8)
-
     def _plot_trajectory_pca(self, ax, all_comparisons, human_text):
         traj_analyzer = SemanticTrajectoryAnalyzer()
         human_traj = traj_analyzer.get_trajectory(human_text)
@@ -1252,63 +1198,6 @@ class AdvancedMultiBotPipeline:
         ax.axvline(x=40, color='red', linestyle='--', alpha=0.5, label='High')
         ax.legend(fontsize=8)
 
-    def _plot_complexity_quality(self, ax, all_comparisons):
-        complexity_levels = {'Very Low': 1, 'Low': 2, 'Medium': 3, 'Medium-High': 4, 'High': 5, 'Very High': 6}
-        x_vals, y_vals, colors, labels = [], [], [], []
-        for bot_name, comp_data in all_comparisons.items():
-            if bot_name in self.bots:
-                complexity = self.bots[bot_name]['complexity']
-                comp_level = complexity_levels.get(complexity, 0)
-                score = comp_data['comparison'].get('composite_score', 0) * 100
-                x_vals.append(comp_level)
-                y_vals.append(score)
-                colors.append(self.bots[bot_name]['color'])
-                labels.append(self.bots[bot_name]['name'][:20])
-        if x_vals:
-            ax.scatter(x_vals, y_vals, c=colors, s=200, alpha=0.6, edgecolors='black', linewidth=1)
-            for i, label in enumerate(labels):
-                ax.annotate(label, (x_vals[i], y_vals[i]), xytext=(5, 5), textcoords='offset points', fontsize=7)
-        ax.set_xlabel('Model Complexity Level')
-        ax.set_ylabel('Quality Score (%)')
-        ax.set_title('Complexity vs Quality')
-        ax.set_xticks([1, 2, 3, 4, 5])
-        ax.set_xticklabels(['Very Low', 'Low', 'Medium', 'Med-High', 'High'], rotation=45, fontsize=8)
-        ax.grid(True, alpha=0.3)
-
-    def _plot_summary_table(self, ax, all_comparisons):
-        col_labels = ['Score', 'Jaccard', 'Levensh.', 'Traj.Sim', 'Repet.']
-        table_data = []
-        row_labels = []
-        sorted_results = sorted(all_comparisons.items(), key=lambda x: x[1]['comparison'].get('composite_score', 0), reverse=True)
-        for bot_name, data in sorted_results:
-            m = data['comparison']
-            row = [
-                f"{m.get('composite_score', 0)*100:.1f}%",
-                f"{m.get('jaccard_similarity', 0):.2f}",
-                f"{m.get('levenshtein_similarity', 0):.2f}",
-                f"{m.get('trajectory_similarity', 0):.3f}",
-                f"{m.get('repetition_ratio', 0)*100:.1f}%"
-            ]
-            table_data.append(row)
-            row_labels.append(self.bots[bot_name]['name'][:20])
-        table = ax.table(cellText=table_data, rowLabels=row_labels, colLabels=col_labels,
-                        cellLoc='center', loc='center')
-        table.auto_set_font_size(False)
-        table.set_fontsize(7)
-        table.scale(0.8, 1.3)
-        for j in range(len(col_labels)):
-            table[0, j].set_facecolor('#2c3e50')
-            table[0, j].set_text_props(color='white', weight='bold')
-        for i in range(len(sorted_results)):
-            score = float(table_data[i][0].replace('%', ''))
-            if score > 80:
-                table[i+1, 0].set_facecolor('#2ecc71')
-            elif score > 60:
-                table[i+1, 0].set_facecolor('#f39c12')
-            else:
-                table[i+1, 0].set_facecolor('#e74c3c')
-        ax.set_title('Detailed Metrics Summary', fontsize=10)
-
     def run_advanced_analysis(self, human_text: str, lang: str = 'en') -> Dict:
         start_time = time.time()
         bot_texts = self.generate_with_all_bots(human_text, lang)
@@ -1333,7 +1222,7 @@ class AdvancedMultiBotPipeline:
                 'name': comp_data['name'],
                 'complexity': comp_data['complexity'],
                 'type': comp_data['type'],
-                'composite_score': float(comp.get('composite_score', 0)),
+                # composite_score удалён
                 'jaccard_similarity': float(comp.get('jaccard_similarity', 0)),
                 'levenshtein_similarity': float(comp.get('levenshtein_similarity', 0)),
                 'perplexity': float(comp.get('perplexity', 0)),
