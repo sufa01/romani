@@ -1,0 +1,415 @@
+{
+  "markov": {
+    "name": "Markov Chain (3-gram)",
+    "complexity": "Very Low",
+    "type": "statistical",
+    "jaccard_similarity": 0.2854663774403471,
+    "levenshtein_similarity": 0.18899999999999995,
+    "perplexity": 1.354923246784522,
+    "syntactic_complexity": 34.10080017759243,
+    "repetition_ratio": 0.3076240680576421,
+    "structural_similarity": 0.9494648351950344,
+    "trajectory_similarity": 0.19386009825457248,
+    "trajectory_length": 187.59613037109375,
+    "trajectory_tortuosity": 146.07098388671875,
+    "network_assortativity": 0.04575309680610509,
+    "network_mean_degree": 7.692957746478873,
+    "network_mean_trans_prob": 0.40911713791113674,
+    "network_top_hubs": [
+      [
+        "of",
+        196
+      ],
+      [
+        "a",
+        166
+      ],
+      [
+        "s",
+        162
+      ],
+      [
+        "t",
+        136
+      ],
+      [
+        "and",
+        130
+      ],
+      [
+        "the",
+        128
+      ],
+      [
+        "1",
+        126
+      ],
+      [
+        "k",
+        112
+      ],
+      [
+        "is",
+        102
+      ],
+      [
+        "p",
+        92
+      ]
+    ]
+  },
+  "simple_lstm": {
+    "name": "Simple LSTM",
+    "complexity": "Low",
+    "type": "neural",
+    "jaccard_similarity": 0.316131830008673,
+    "levenshtein_similarity": 0.20099999999999996,
+    "perplexity": 1.7887762600466313,
+    "syntactic_complexity": 28.990227219364165,
+    "repetition_ratio": 0.2705126976179283,
+    "structural_similarity": 0.9508353081933525,
+    "trajectory_similarity": 0.21042493081736538,
+    "trajectory_length": 255.19342041015625,
+    "trajectory_tortuosity": 185.56239318847656,
+    "network_assortativity": 0.07006968010213739,
+    "network_mean_degree": 7.734015345268542,
+    "network_mean_trans_prob": 0.42896324739440483,
+    "network_top_hubs": [
+      [
+        "a",
+        262
+      ],
+      [
+        "of",
+        258
+      ],
+      [
+        "the",
+        228
+      ],
+      [
+        "s",
+        184
+      ],
+      [
+        "is",
+        174
+      ],
+      [
+        "and",
+        156
+      ],
+      [
+        "n",
+        153
+      ],
+      [
+        "t",
+        146
+      ],
+      [
+        "p",
+        132
+      ],
+      [
+        "1",
+        82
+      ]
+    ]
+  },
+  "better_lstm": {
+    "name": "Better LSTM (char-level)",
+    "complexity": "Medium",
+    "type": "neural",
+    "jaccard_similarity": 0.03508095605242868,
+    "levenshtein_similarity": 0.19799999999999995,
+    "perplexity": 1.0100523122487717,
+    "syntactic_complexity": 40.20350266513129,
+    "repetition_ratio": 0.05014290007224925,
+    "structural_similarity": 0.5877649710746178,
+    "trajectory_similarity": 0.12062893760133517,
+    "trajectory_length": 35.51422882080078,
+    "trajectory_tortuosity": 24.54488182067871,
+    "network_assortativity": 0.038503520564085264,
+    "network_mean_degree": 3.212962962962963,
+    "network_mean_trans_prob": 0.6301169590643275,
+    "network_top_hubs": [
+      [
+        "s",
+        68
+      ],
+      [
+        "t",
+        48
+      ],
+      [
+        "a",
+        36
+      ],
+      [
+        "f",
+        34
+      ],
+      [
+        "1",
+        30
+      ],
+      [
+        "is",
+        24
+      ],
+      [
+        "n",
+        22
+      ],
+      [
+        "k",
+        20
+      ],
+      [
+        "p",
+        20
+      ],
+      [
+        "the",
+        20
+      ]
+    ]
+  },
+  "hybrid": {
+    "name": "Hybrid N-gram+NN",
+    "complexity": "Medium-High",
+    "type": "hybrid",
+    "jaccard_similarity": 0.20104895104895104,
+    "levenshtein_similarity": 0.17300000000000004,
+    "perplexity": 1.232016063720811,
+    "syntactic_complexity": 36.94893714628377,
+    "repetition_ratio": 0.23076615576615578,
+    "structural_similarity": 0.8804440504025175,
+    "trajectory_similarity": 0.18488782513596613,
+    "trajectory_length": 149.14260864257812,
+    "trajectory_tortuosity": 107.2532730102539,
+    "network_assortativity": 0.16552684116887031,
+    "network_mean_degree": 6.076767676767677,
+    "network_mean_trans_prob": 0.5066530194472876,
+    "network_top_hubs": [
+      [
+        "the",
+        104
+      ],
+      [
+        "of",
+        96
+      ],
+      [
+        "n",
+        94
+      ],
+      [
+        "x",
+        94
+      ],
+      [
+        "k",
+        90
+      ],
+      [
+        "a",
+        84
+      ],
+      [
+        "t",
+        80
+      ],
+      [
+        "i",
+        67
+      ],
+      [
+        "1",
+        60
+      ],
+      [
+        "j",
+        50
+      ]
+    ]
+  },
+  "cnn_attention": {
+    "name": "CNN+Attention",
+    "complexity": "Medium-High",
+    "type": "neural",
+    "jaccard_similarity": 0.13592233009708737,
+    "levenshtein_similarity": 0.20599999999999996,
+    "perplexity": 2.0527393522113875,
+    "syntactic_complexity": 29.586759662571747,
+    "repetition_ratio": 0.3240510844676503,
+    "structural_similarity": 0.9960586683427168,
+    "trajectory_similarity": 0.15521159119562702,
+    "trajectory_length": 86.13719177246094,
+    "trajectory_tortuosity": 74.25322723388672,
+    "network_assortativity": 0.08951688101392612,
+    "network_mean_degree": 9.370716510903426,
+    "network_mean_trans_prob": 0.43673469387755104,
+    "network_top_hubs": [
+      [
+        "the",
+        194
+      ],
+      [
+        "of",
+        160
+      ],
+      [
+        "a",
+        158
+      ],
+      [
+        "p",
+        88
+      ],
+      [
+        "is",
+        86
+      ],
+      [
+        "and",
+        84
+      ],
+      [
+        "1",
+        76
+      ],
+      [
+        "n",
+        72
+      ],
+      [
+        "k",
+        64
+      ],
+      [
+        "t",
+        62
+      ]
+    ]
+  },
+  "advanced_ngram": {
+    "name": "Advanced N-gram (GPT-2 alt)",
+    "complexity": "High",
+    "type": "hybrid",
+    "jaccard_similarity": 0.2568567696996082,
+    "levenshtein_similarity": 0.397,
+    "perplexity": 1.2057495926901882,
+    "syntactic_complexity": 37.44777497430934,
+    "repetition_ratio": 0.1452986100658461,
+    "structural_similarity": 0.7880852464158066,
+    "trajectory_similarity": 0.2226778916557933,
+    "trajectory_length": 165.7409210205078,
+    "trajectory_tortuosity": 125.77590942382812,
+    "network_assortativity": 0.0488172180165653,
+    "network_mean_degree": 4.744479495268139,
+    "network_mean_trans_prob": 0.51586655817738,
+    "network_top_hubs": [
+      [
+        "a",
+        98
+      ],
+      [
+        "the",
+        94
+      ],
+      [
+        "1",
+        92
+      ],
+      [
+        "of",
+        88
+      ],
+      [
+        "s",
+        66
+      ],
+      [
+        "n",
+        60
+      ],
+      [
+        "k",
+        56
+      ],
+      [
+        "and",
+        46
+      ],
+      [
+        "to",
+        38
+      ],
+      [
+        "is",
+        38
+      ]
+    ]
+  },
+  "statistical_lm": {
+    "name": "Statistical LM (BERT alt)",
+    "complexity": "High",
+    "type": "statistical",
+    "jaccard_similarity": 0.24805867126833478,
+    "levenshtein_similarity": 0.19299999999999995,
+    "perplexity": 1.3092477594744496,
+    "syntactic_complexity": 631.1370434614072,
+    "repetition_ratio": 0.2293885843862188,
+    "structural_similarity": 0.8943870749663075,
+    "trajectory_similarity": 0.11481084062975419,
+    "trajectory_length": 0.0,
+    "trajectory_tortuosity": 0.0,
+    "network_assortativity": 0.03303277260180203,
+    "network_mean_degree": 6.346875,
+    "network_mean_trans_prob": 0.42384105960264895,
+    "network_top_hubs": [
+      [
+        "a",
+        136
+      ],
+      [
+        "the",
+        128
+      ],
+      [
+        "of",
+        120
+      ],
+      [
+        "s",
+        120
+      ],
+      [
+        "and",
+        118
+      ],
+      [
+        "is",
+        118
+      ],
+      [
+        "p",
+        84
+      ],
+      [
+        "t",
+        76
+      ],
+      [
+        "that",
+        56
+      ],
+      [
+        "k",
+        54
+      ]
+    ]
+  }
+}
