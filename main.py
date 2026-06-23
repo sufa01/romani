@@ -1096,7 +1096,7 @@ class AdvancedMultiBotPipeline:
         ax.set_theta_offset(np.pi / 2)
         ax.set_theta_direction(-1)
         plt.xticks(angles[:-1], categories, size=8)
-        sorted_bots = sorted(all_comparisons.items(), key=lambda x: x[1]['comparison'].get('composite_score', 0), reverse=True)[:5]
+        sorted_bots = list(all_comparisons.items())
         for bot_name, comp_data in sorted_bots:
             m = comp_data['comparison']
             values = [
