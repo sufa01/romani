@@ -982,7 +982,7 @@ class AdvancedMultiBotPipeline:
         fig, axes = plt.subplots(2, 3, figsize=(20, 14))
         first_bot = list(all_comparisons.keys())[0]
         human_net = all_comparisons[first_bot]['comparison']['network']['human']
-        sorted_bots = sorted(all_comparisons.items(), key=lambda x: x[1]['comparison'].get('composite_score', 0), reverse=True)
+        sorted_bots = sorted(all_comparisons.items(), reverse=True)
         top_bots = sorted_bots[:3]
         ax = axes[0, 0]
         degrees_human = human_net['degree_distribution']
