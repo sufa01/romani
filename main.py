@@ -1238,8 +1238,7 @@ class AdvancedMultiBotPipeline:
         metrics_file = os.path.join(self.output_dir, f'advanced_metrics_{lang}.json')
         with open(metrics_file, 'w', encoding='utf-8') as f:
             json.dump(metrics_data, f, indent=2, default=str)
-        print(f"✅ Results saved to {self.output_dir}")
-
+            
 def collect_pdfs_from_folder(folder_path: str) -> List[str]:
     if not os.path.isdir(folder_path):
         return []
@@ -1317,10 +1316,6 @@ def compare_bible_vs_literature(pipeline: AdvancedMultiBotPipeline, lang: str, b
             'bible_repet': b_repet,
             'lit_repet': l_repet
         })
-    print(f"\n{'Bot':<30} {'Bible Score':>12} {'Lit Score':>12} {'Diff':>8}")
-    for d in comp_data:
-        diff = d['lit_score'] - d['bible_score']
-        print(f"{d['bot']:<30} {d['bible_score']:>11.1f}% {d['lit_score']:>11.1f}% {diff:>+7.1f}%")
     fig, axes = plt.subplots(1, 3, figsize=(20, 6))
     bots_names = [d['bot'] for d in comp_data]
     bible_scores = [d['bible_score'] for d in comp_data]
