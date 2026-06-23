@@ -1,65 +1,11 @@
 [
   {
-    "bot": "Advanced N-gram (GPT-2 alt)",
-    "bible_score": 50.291329420914266,
-    "lit_score": 48.70248977181337,
-    "bible_traj": 0.2027221261361634,
-    "lit_traj": 0.1937316427777177,
-    "bible_repet": 11.66045702930949,
-    "lit_repet": 23.23262691651212
-  },
-  {
-    "bot": "Better LSTM (char-level)",
-    "bible_score": 46.07615835479188,
-    "lit_score": 45.62179951173581,
-    "bible_traj": 0.12972718168537437,
-    "lit_traj": 0.12118756321591623,
-    "bible_repet": 3.862912686442098,
-    "lit_repet": 4.370262860828897
-  },
-  {
-    "bot": "CNN+Attention",
-    "bible_score": 41.059610952869065,
-    "lit_score": 38.56513583802853,
-    "bible_traj": 0.15952439060084192,
-    "lit_traj": 0.15143577659684115,
-    "bible_repet": 31.79147226001392,
-    "lit_repet": 35.192282880121454
-  },
-  {
-    "bot": "Hybrid N-gram+NN",
-    "bible_score": 50.09416973976909,
-    "lit_score": 44.704037562262336,
-    "bible_traj": 0.20172247289565085,
-    "lit_traj": 0.16263469275807776,
-    "bible_repet": 12.13353824278734,
-    "lit_repet": 22.405771746238333
-  },
-  {
     "bot": "Markov Chain (3-gram)",
-    "bible_score": 46.87673847249399,
-    "lit_score": 48.11415377542041,
-    "bible_traj": 0.23485791978387374,
-    "lit_traj": 0.23024061683173871,
-    "bible_repet": 31.96496732724191,
-    "lit_repet": 25.95991098434429
-  },
-  {
-    "bot": "Simple LSTM",
-    "bible_score": 49.66306912159635,
-    "lit_score": 45.55487535858737,
-    "bible_traj": 0.21531552339741605,
-    "lit_traj": 0.20052467955149195,
-    "bible_repet": 22.603474644907955,
-    "lit_repet": 28.50880817965252
-  },
-  {
-    "bot": "Statistical LM (BERT alt)",
-    "bible_score": 46.40078386801979,
-    "lit_score": 43.48607645295718,
-    "bible_traj": 0.1381260010857699,
-    "lit_traj": 0.1139641920637329,
-    "bible_repet": 19.901271792157647,
-    "lit_repet": 23.817248435189978
+    "bible_score": 0,
+    "lit_score": 0,
+    "bible_traj": 0.18570737558889722,
+    "lit_traj": 0.21816467053509372,
+    "bible_repet": 23.335773501801352,
+    "lit_repet": 32.684877680555765
   }
 ]
