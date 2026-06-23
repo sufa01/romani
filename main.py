@@ -1281,19 +1281,28 @@ def run_literature_analysis(pipeline: AdvancedMultiBotPipeline, lang: str, pdf_t
         print(f"No PDF files in '{folder_name}'.")
         return None
     full_text, failed_files = extract_text_from_pdfs(pdf_files, lang, pdf_to_text_func)
-    # Берем фрагмент размером text_sample_size (50000 символов)
     full_text = pipeline.get_text_fragment(full_text, pipeline.text_sample_size)
     print(f"Total text for analysis: {len(full_text)} characters")
     os.makedirs(pipeline.output_dir, exist_ok=True)
     lit_output_dir = os.path.join(pipeline.output_dir, f"literature_{lang}")
     os.makedirs(lit_output_dir, exist_ok=True)
-    os.makedirs(lit_output_dir, exist_ok=True)
     original_output_dir = pipeline.output_dir
     pipeline.output_dir = lit_output_dir
     results = pipeline.run_advanced_analysis(full_text, lang=lang)
     pipeline.output_dir = original_output_dir
-    return results
 
+    print(f"Detailed results for {lang.upper()} literature")
+    for bot_name, comp_data in results.items():
+        comp = comp_data['comparison']
+        net = comp.get('network', {})
+        bot_net = net.get('bot', {})
+        human_net = net.get('human', {})
+        print(f"\n{comp_data['name']}:")
+        print(f"Trajectory Similarity: {comp.get('trajectory_similarity', 0):.3f}")
+        print(f"Repetition Ratio: {comp.get('repetition_ratio', 0)*100:.1f}%")
+        print(f"Assortativity (bot): {bot_net.get('assortativity', 0):.3f} (human: {human_net.get('assortativity', 0):.3f})")
+    return results
+    
 def compare_bible_vs_literature(pipeline: AdvancedMultiBotPipeline, lang: str, bible_results: Dict, lit_results: Optional[Dict]):
     if lit_results is None:
         return
